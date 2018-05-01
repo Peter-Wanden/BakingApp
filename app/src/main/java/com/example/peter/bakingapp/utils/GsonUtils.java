@@ -43,12 +43,4 @@ public class GsonUtils {
     class Recipes {
         ArrayList<Recipe> recipes;
     }
-
-
-    // Loop through the response and extract the recipes
-
-    // Loop through and extract the ingredients
-
-    // Loop through abd extract the steps
-
 }
