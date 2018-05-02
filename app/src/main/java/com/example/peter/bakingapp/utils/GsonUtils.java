@@ -3,8 +3,10 @@ package com.example.peter.bakingapp.utils;
 import com.example.peter.bakingapp.app.Constants;
 import com.example.peter.bakingapp.model.Recipe;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,14 +35,9 @@ public class GsonUtils {
             e.printStackTrace();
         }
 
-        Recipes recipes = new Gson().fromJson(jsonResponse, Recipes.class);
+        // Json starts with an Array so we have to use a TypeToken
+        Type recipesType = new TypeToken<ArrayList<Recipe>>(){}.getType();
 
-        return recipes.recipes;
-
-    }
-
-    // Inner class provides a container for the results
-    class Recipes {
-        ArrayList<Recipe> recipes;
+        return new Gson().fromJson(jsonResponse, recipesType);
     }
 }
