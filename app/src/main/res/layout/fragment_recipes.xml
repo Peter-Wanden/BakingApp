@@ -18,7 +18,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:contentDescription="@string/movie_discovery_no_network"
+        android:contentDescription="@string/no_data_available"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="No data available on server."/>
+
+    <TextView
+        android:id="@+id/fragment_recipes_no_network"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/no_network_connection"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/black"
         tools:text="No network connection."/>

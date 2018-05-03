@@ -22,6 +22,7 @@ public class Recipe {
     @SerializedName(value = "image", alternate = "mImage")
     private String mImage;
 
+    // TODO - Add the following ArrayLists to Parcelable
     /* The list of ingredients to make the recipe */
     private ArrayList<Ingredient> mIngredients;
 
@@ -44,4 +45,12 @@ public class Recipe {
         this.mIngredients = ingredients;
         this.mSteps = steps;
     }
+
+    /* Getters and Setters */
+    public int getId() {return mId;}
+    public String getTitle() {return mName;}
+    public int getServings() {return mServings;}
+    public String getImage() {return mImage;}
+    public ArrayList<Ingredient> getIngredients() {return mIngredients;}
+    public ArrayList<Steps> getmSteps() {return mSteps;}
 }

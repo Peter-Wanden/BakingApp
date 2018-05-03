@@ -3,7 +3,7 @@ package com.example.peter.bakingapp;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.peter.bakingapp.ui.recipe.RecipeCardView;
+import com.example.peter.bakingapp.ui.recipe.RecipeFragment;
 
 public class MainActivity
         extends AppCompatActivity {
@@ -14,7 +14,7 @@ public class MainActivity
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            RecipeCardView recipeCardView = new RecipeCardView();
+            RecipeFragment recipeCardView = new RecipeFragment();
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.activity_main_fragment_container, recipeCardView)

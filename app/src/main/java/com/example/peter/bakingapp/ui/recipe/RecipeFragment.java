@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,16 +24,23 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class RecipeCardView
-        extends Fragment
-        implements LoaderManager.LoaderCallbacks<ArrayList<Recipe>>{
+public class RecipeFragment
+        extends
+        Fragment
+        implements
+        LoaderManager.LoaderCallbacks<ArrayList<Recipe>>,
+        RecipeAdapter.RecipeAdapterOnClickHandler {
 
-    private static final String LOG_TAG = RecipeCardView.class.getSimpleName();
+    private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
     private static final int RECIPE_LOADER_ID = 100;
     private ArrayList<Recipe> mRecipes;
     private View mLoadingIndicator;
     private TextView mEmptyStateTextView;
     private RecyclerView mRecyclerView;
+    private RecipeAdapter mRecipeAdapter;
+    private Recipe mCurrentRecipe;
+    private LinearLayoutManager mLinearLayoutManager;
+    private GridLayoutManager mGridLayoutManager;
 
     @Nullable
     @Override
@@ -52,6 +61,20 @@ public class RecipeCardView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Create dynamic RecyclerViews for:-
+        // Portrait for phone
+        // Landscape for phone
+        // Portrait for tablet
+        // Landscape for tablet.
+
+        mRecipeAdapter = new RecipeAdapter(getActivity(), this);
+        mRecyclerView.setAdapter(mRecipeAdapter);
+        mLinearLayoutManager = new
+                LinearLayoutManager(getActivity().getApplicationContext(),
+                LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
+
         /* Check for connectivity */
         if (NetworkUtils.getNetworkStatus(Objects.requireNonNull(getActivity()))) {
 
@@ -63,21 +86,47 @@ public class RecipeCardView
         }
     }
 
+    /* Implements the onClick interface in the Recipe adapter */
+    @Override
+    public void onClick(Recipe clickedRecipe) {
+        mCurrentRecipe = clickedRecipe;
+    }
+
     @NonNull
     @Override
     public Loader<ArrayList<Recipe>> onCreateLoader(int loaderId, @Nullable Bundle bundle) {
+        indicateLoading();
         return new RecipeLoader(getActivity());
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<Recipe>> loader, ArrayList<Recipe> recipes) {
 
-        if (recipes !=null) mRecipes = recipes;
+        if (recipes !=null && recipes.size() > 0) {
+            showResults();
+            mRecipeAdapter.swapRecipes(recipes);
+        } else {
+            noDataAvailable();
+        }
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<ArrayList<Recipe>> loader) {
         mRecipes.clear();
         mRecipes = null;
+    }
+
+    /* Data loading and results states */
+    private void indicateLoading() {
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
+    private void showResults() {
+        mLoadingIndicator.setVisibility(View.GONE);
+    }
+
+    private void noDataAvailable() {
+        showResults();
+        mEmptyStateTextView.setVisibility(View.VISIBLE);
     }
 }
