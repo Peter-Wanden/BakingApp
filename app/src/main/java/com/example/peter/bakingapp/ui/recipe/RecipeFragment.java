@@ -9,6 +9,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,18 +62,26 @@ public class RecipeFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Create dynamic RecyclerViews for:-
+        mRecipeAdapter = new RecipeAdapter(getActivity(), this);
+        mRecyclerView.setAdapter(mRecipeAdapter);
+
+        /* Create dynamic RecyclerViews depending on the display type */
+        if (getResources().getBoolean(R.bool.is_tablet) || getResources().getBoolean(R.bool.is_landscape)) {
+            mGridLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(),
+                    columnCalculator());
+            mRecyclerView.setLayoutManager(mGridLayoutManager);
+
+        } else {
+            mLinearLayoutManager = new
+                    LinearLayoutManager(getActivity().getApplicationContext(),
+                    LinearLayoutManager.VERTICAL, false);
+            mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        }
         // Portrait for phone
         // Landscape for phone
         // Portrait for tablet
         // Landscape for tablet.
-
-        mRecipeAdapter = new RecipeAdapter(getActivity(), this);
-        mRecyclerView.setAdapter(mRecipeAdapter);
-        mLinearLayoutManager = new
-                LinearLayoutManager(getActivity().getApplicationContext(),
-                LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         /* Check for connectivity */
@@ -84,6 +93,18 @@ public class RecipeFragment
              */
             getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
         }
+    }
+
+    /* Screen width column calculator */
+    private int columnCalculator() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        // Width of smallest tablet
+        int divider = 600;
+        int width = metrics.widthPixels;
+        int colums = width / divider;
+        if (colums < 2) return 2;
+        return colums;
     }
 
     /* Implements the onClick interface in the Recipe adapter */
