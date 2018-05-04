@@ -3,7 +3,6 @@ package com.example.peter.bakingapp.ui.recipe;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,10 @@ public class RecipeAdapter
 
     /* Used to access utility methods, app resources and layout inflaters */
     private final Context mContext;
+
     /* Click interface */
     final private RecipeAdapterOnClickHandler mClickHandler;
+
     /* Recipes array */
     private ArrayList<Recipe> mRecipes;
 
@@ -40,7 +41,7 @@ public class RecipeAdapter
     @Override
     public RecipeAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
-        int layoutForThisItem = R.layout.recipe_list_item;
+        int layoutForThisItem = R.layout.list_item_recipe;
 
         View view = LayoutInflater
                 .from(mContext)
@@ -123,10 +124,8 @@ public class RecipeAdapter
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
-
             Recipe currentRecipe = mRecipes.get(clickedPosition);
-            Log.e(LOG_TAG, "Recipe No: " + currentRecipe.getId() + " has been clicked.");
-
+            mClickHandler.onClick(currentRecipe);
         }
     }
 }

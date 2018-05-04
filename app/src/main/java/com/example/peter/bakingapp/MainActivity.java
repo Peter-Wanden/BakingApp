@@ -13,6 +13,7 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // If it doesn't already exist, fire up the RecipesFragment.
         if (savedInstanceState == null) {
             RecipeFragment recipeCardView = new RecipeFragment();
             getSupportFragmentManager()

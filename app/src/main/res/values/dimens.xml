@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Dimensions taken from https://material.io/guidelines/components/cards.html#cards-content-blocks -->
+<resources>
+    <dimen name="card_title_text">24sp</dimen>
+    <dimen name="card_title_top_padding">24dp</dimen>
+    <dimen name="card_bottom_padding">16dp</dimen>
+    <dimen name="card_right_left_pading">16dp</dimen>
+</resources>

@@ -2,5 +2,9 @@
     <string name="app_name">BakingApp</string>
     <string name="no_network_connection">No network connection</string>
     <string name="no_data_available">No data available on the server</string>
-    <string name="no_of_servings">Serves </string>
+
+    <!-- Denotes how many portions a recipe serves -->
+    <string name="servings">Serves </string>
+    <string name="fragment_recipe_detail_ingredients_title">Ingredients</string>
+    <string name="fragment_recipe_detail_steps_title">Steps</string>
 </resources>

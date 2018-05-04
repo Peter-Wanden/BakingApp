@@ -1,5 +1,6 @@
 package com.example.peter.bakingapp.ui.recipe;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,12 +18,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.peter.bakingapp.R;
+import com.example.peter.bakingapp.RecipeDetailActivity;
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.utils.NetworkUtils;
 import com.example.peter.bakingapp.utils.RecipeLoader;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
 
 
 public class RecipeFragment
@@ -39,7 +43,6 @@ public class RecipeFragment
     private TextView mEmptyStateTextView;
     private RecyclerView mRecyclerView;
     private RecipeAdapter mRecipeAdapter;
-    private Recipe mCurrentRecipe;
     private LinearLayoutManager mLinearLayoutManager;
     private GridLayoutManager mGridLayoutManager;
 
@@ -50,10 +53,17 @@ public class RecipeFragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_recipes, container, false);
-        mRecyclerView = rootView.findViewById(R.id.fragment_recipes_recycler_view);
-        mLoadingIndicator = rootView.findViewById(R.id.fragment_recipes_progress_bar);
-        mEmptyStateTextView = rootView.findViewById(R.id.fragment_recipes_empty_view);
+        View rootView = inflater.inflate(
+                R.layout.fragment_recipes, container, false);
+
+        mRecyclerView = rootView.findViewById(
+                R.id.fragment_recipes_recycler_view);
+
+        mLoadingIndicator = rootView.findViewById(
+                R.id.fragment_recipes_progress_bar);
+
+        mEmptyStateTextView = rootView.findViewById(
+                R.id.fragment_recipes_empty_view);
 
         return rootView;
     }
@@ -65,23 +75,29 @@ public class RecipeFragment
         mRecipeAdapter = new RecipeAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mRecipeAdapter);
 
-        /* Create dynamic RecyclerViews depending on the display type */
-        if (getResources().getBoolean(R.bool.is_tablet) || getResources().getBoolean(R.bool.is_landscape)) {
-            mGridLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(),
+        /* Create RecyclerViews with dynamic widths depending on the display type. */
+        // Portrait for phone.
+        // Landscape for phone.
+        // Portrait for tablet.
+        // Landscape for tablet.
+        if (getResources().getBoolean(R.bool.is_tablet) ||
+                getResources().getBoolean(R.bool.is_landscape)) {
+
+            mGridLayoutManager = new GridLayoutManager(getActivity()
+                    .getApplicationContext(),
                     columnCalculator());
+
             mRecyclerView.setLayoutManager(mGridLayoutManager);
 
         } else {
             mLinearLayoutManager = new
                     LinearLayoutManager(getActivity().getApplicationContext(),
                     LinearLayoutManager.VERTICAL, false);
+
             mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         }
-        // Portrait for phone
-        // Landscape for phone
-        // Portrait for tablet
-        // Landscape for tablet.
+
         mRecyclerView.setHasFixedSize(true);
 
         /* Check for connectivity */
@@ -97,20 +113,25 @@ public class RecipeFragment
 
     /* Screen width column calculator */
     private int columnCalculator() {
+
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
         // Width of smallest tablet
         int divider = 600;
         int width = metrics.widthPixels;
         int colums = width / divider;
         if (colums < 2) return 2;
+
         return colums;
     }
 
     /* Implements the onClick interface in the Recipe adapter */
     @Override
-    public void onClick(Recipe clickedRecipe) {
-        mCurrentRecipe = clickedRecipe;
+    public void onClick(Recipe selectedRecipe) {
+        Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+        intent.putExtra(SELECTED_RECIPE, selectedRecipe);
+        startActivity(intent);
     }
 
     @NonNull

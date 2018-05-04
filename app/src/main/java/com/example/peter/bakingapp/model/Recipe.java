@@ -1,10 +1,25 @@
 package com.example.peter.bakingapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class Recipe {
+public class Recipe implements Parcelable {
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 
     /* The recipes Id from JSON */
     @SerializedName(value = "id", alternate = "mId")
@@ -22,14 +37,23 @@ public class Recipe {
     @SerializedName(value = "image", alternate = "mImage")
     private String mImage;
 
-    // TODO - Add the following ArrayLists to Parcelable
     /* The list of ingredients to make the recipe */
+    @SerializedName(value = "ingredients", alternate = "mIngredients")
     private ArrayList<Ingredient> mIngredients;
 
     /* A list of instructions that describe how to make the recipe */
+    @SerializedName(value = "steps", alternate = "mSteps")
     private ArrayList<Steps> mSteps;
 
-    /* Constructor */
+    /**
+     * Constructor for a recipe object
+     * @param id            The id of the recipe.
+     * @param name          The name of the recipe.
+     * @param servings      The number of servinge the recipe provides.
+     * @param image         A URL location for an image related to the recipe.
+     * @param ingredients   An ArrayList of ingredients.
+     * @param steps         An ArrayList of the steps needed to be take to create this recipe.
+     */
     public Recipe(
             int id,
             String name,
@@ -46,11 +70,35 @@ public class Recipe {
         this.mSteps = steps;
     }
 
+    protected Recipe(Parcel in) {
+        mId = in.readInt();
+        mName = in.readString();
+        mServings = in.readInt();
+        mImage = in.readString();
+        mIngredients = in.createTypedArrayList(Ingredient.CREATOR);
+        mSteps = in.createTypedArrayList(Steps.CREATOR);
+    }
+
     /* Getters and Setters */
     public int getId() {return mId;}
     public String getTitle() {return mName;}
     public int getServings() {return mServings;}
     public String getImage() {return mImage;}
     public ArrayList<Ingredient> getIngredients() {return mIngredients;}
-    public ArrayList<Steps> getmSteps() {return mSteps;}
+    public ArrayList<Steps> getSteps() {return mSteps;}
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mName);
+        dest.writeInt(mServings);
+        dest.writeString(mImage);
+        dest.writeTypedList(mIngredients);
+        dest.writeTypedList(mSteps);
+    }
 }

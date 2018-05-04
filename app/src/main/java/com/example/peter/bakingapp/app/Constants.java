@@ -4,4 +4,7 @@ public class Constants {
 
     /* URL elements */
     public static final String recipeUrl = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+
+    /* Identifier for use in Key-Pairing a recipe */
+    public static final String SELECTED_RECIPE = "selected_recipe";
 }
