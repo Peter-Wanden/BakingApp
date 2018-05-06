@@ -28,4 +28,11 @@
         <item name="android:paddingBottom">@dimen/card_bottom_padding</item>
     </style>
 
+    <style name="TableText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
+
 </resources>
