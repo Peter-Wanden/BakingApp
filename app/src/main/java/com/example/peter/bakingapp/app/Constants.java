@@ -7,4 +7,7 @@ public class Constants {
 
     /* Identifier for use in Key-Pairing a recipe */
     public static final String SELECTED_RECIPE = "selected_recipe";
+
+    /* Key value for the recipe detail fragment parcelable object */
+    public static final String RECIPE_DETAIL_FRAGMENT = "recipe_detail_fragment";
 }
