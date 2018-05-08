@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.model.Ingredient;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class RecipeDetailIngredientAdapter
@@ -44,13 +45,17 @@ public class RecipeDetailIngredientAdapter
         /* Get the ingredient at the passed in position */
         Ingredient ingredients = mIngredients.get(position);
 
-        /* Get the fields we're interested in */
-        double quantity = ingredients.getQuantity();
-        String measure = ingredients.getMeasure();
-        String ingredient = ingredients.getIngredient();
+        /* Get the fields we're interested in, format then display them */
+        DecimalFormat decimalFormat = new DecimalFormat("####.####");
+        holder.quantityTV.setText(decimalFormat.format(ingredients.getQuantity()));
 
-        holder.quantityTV.setText(String.valueOf(quantity));
-        holder.measureTV.setText(measure);
+        holder.measureTV.setText(ingredients.getMeasure().toLowerCase());
+
+        String ingredient = ingredients.getIngredient()
+                .substring(0,1)
+                .toUpperCase()
+                + ingredients.getIngredient().substring(1);
+
         holder.ingredientTV.setText(ingredient);
     }
 

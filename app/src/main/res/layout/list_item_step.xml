@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_weight="1"
+        android:gravity="end"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        style="@style/TableText"
+        android:text="-"/>
+
+    <TextView
+        android:id="@+id/list_item_step_stepsTv"
+        android:layout_weight="4"
+        android:paddingBottom="@dimen/card_bottom_padding"
+        style="@style/TableText"/>
+
+</LinearLayout>

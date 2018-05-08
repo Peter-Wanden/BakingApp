@@ -32,6 +32,7 @@ public class RecipeDetailFragment extends Fragment {
 
     private ArrayList<Steps> mSteps;
     private RecyclerView mStepsRecyclerView;
+    private RecipeDetailStepsAdapter mStepsAdapter;
     private LinearLayoutManager mStepsLayoutManager;
 
     @Nullable
@@ -57,6 +58,7 @@ public class RecipeDetailFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        /* Setup and display the ingredients */
         mIngredientAdapter = new RecipeDetailIngredientAdapter(getActivity());
 
         mIngredientsLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
@@ -64,18 +66,28 @@ public class RecipeDetailFragment extends Fragment {
 
         mIngredientsRecyclerView.setLayoutManager(mIngredientsLayoutManager);
         mIngredientsRecyclerView.setAdapter(mIngredientAdapter);
-//        mIngredientsRecyclerView.setHasFixedSize(true);
+        mIngredientsRecyclerView.setHasFixedSize(true);
         mIngredientsRecyclerView.setNestedScrollingEnabled(false);
+
+        /* Setup and display the steps */
+        mStepsAdapter = new RecipeDetailStepsAdapter(getActivity(), null);
 
         mStepsLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL, false);
 
-        if (savedInstanceState == null ) {
-            mSelectedRecipe  = getArguments().getParcelable(SELECTED_RECIPE);
-            mIngredients = mSelectedRecipe.getIngredients();
-            mSteps = mSelectedRecipe.getSteps();
+        mStepsRecyclerView.setLayoutManager(mStepsLayoutManager);
+        mStepsRecyclerView.setAdapter(mStepsAdapter);
+        mStepsRecyclerView.setHasFixedSize(true);
+        mStepsRecyclerView.setNestedScrollingEnabled(false);
 
+        if (savedInstanceState == null ) {
+            mSelectedRecipe = getArguments().getParcelable(SELECTED_RECIPE);
+
+            mIngredients = mSelectedRecipe.getIngredients();
             mIngredientAdapter.newIngredients(mIngredients);
+
+            mSteps = mSelectedRecipe.getSteps();
+            mStepsAdapter.swapSteps(mSteps);
         }
     }
 }

@@ -25,7 +25,7 @@ public class RecipeAdapter
     private final Context mContext;
 
     /* Click interface */
-    final private RecipeAdapterOnClickHandler mClickHandler;
+    private final RecipeAdapterOnClickHandler mClickHandler;
 
     /* Recipes array */
     private ArrayList<Recipe> mRecipes;
@@ -64,7 +64,7 @@ public class RecipeAdapter
         int servings = currentRecipe.getServings();
 
         /* Apply the fields to the views */
-        holder.recipeTitle.setText(recipeTitle);
+        holder.recipeTitleTv.setText(recipeTitle);
 
         if (imageLink != null && imageLink.length() > 2) {
             Picasso
@@ -73,15 +73,15 @@ public class RecipeAdapter
                             .getImage())
                     .placeholder(R.drawable.menu_placeholder)
                     .error(R.drawable.menu_placeholder)
-                    .into(holder.recipeThumbnail);
+                    .into(holder.recipeThumbnaiIv);
         } else {
             Picasso
                     .get()
                     .load(R.drawable.menu_placeholder)
-                    .into(holder.recipeThumbnail);
+                    .into(holder.recipeThumbnaiIv);
         }
 
-        holder.recipeServings.setText(String.valueOf(servings));
+        holder.recipeServingsTv.setText(String.valueOf(servings));
     }
 
     @Override
@@ -107,16 +107,16 @@ public class RecipeAdapter
             implements
             View.OnClickListener {
 
-        final ImageView recipeThumbnail;
-        final TextView recipeTitle;
-        final TextView recipeServings;
+        final ImageView recipeThumbnaiIv;
+        final TextView recipeTitleTv;
+        final TextView recipeServingsTv;
 
         public RecipeAdapterViewHolder(View itemView) {
             super(itemView);
 
-            recipeThumbnail = itemView.findViewById(R.id.recipe_list_item_thumbnail);
-            recipeTitle = itemView.findViewById(R.id.recipe_list_item_title);
-            recipeServings = itemView.findViewById(R.id.recipe_list_item_servings);
+            recipeThumbnaiIv = itemView.findViewById(R.id.recipe_list_item_thumbnail);
+            recipeTitleTv = itemView.findViewById(R.id.recipe_list_item_title);
+            recipeServingsTv = itemView.findViewById(R.id.recipe_list_item_servings);
 
             itemView.setOnClickListener(this);
         }
