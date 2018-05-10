@@ -31,6 +31,14 @@
             </meta-data>
         </activity>
 
+        <activity android:name=".StepsActivity"
+            android:parentActivityName=".RecipeDetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RecipeDetailActivity">
+            </meta-data>
+        </activity>
+
     </application>
 
 </manifest>

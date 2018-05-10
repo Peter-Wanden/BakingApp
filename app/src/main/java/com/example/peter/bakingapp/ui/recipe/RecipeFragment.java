@@ -120,10 +120,10 @@ public class RecipeFragment
         // Width of smallest tablet
         int divider = 600;
         int width = metrics.widthPixels;
-        int colums = width / divider;
-        if (colums < 2) return 2;
+        int columns = width / divider;
+        if (columns < 2) return 2;
 
-        return colums;
+        return columns;
     }
 
     /* Implements the onClick interface in the Recipe adapter */

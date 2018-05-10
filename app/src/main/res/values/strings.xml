@@ -7,4 +7,6 @@
     <string name="servings">Serves </string>
     <string name="fragment_recipe_detail_ingredients_title">Ingredients</string>
     <string name="fragment_recipe_detail_steps_title">Steps</string>
+    <string name="previous_button">Previous</string>
+    <string name="next_button">Next</string>
 </resources>

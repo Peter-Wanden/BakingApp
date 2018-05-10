@@ -3,6 +3,7 @@ package com.example.peter.bakingapp.ui.recipe;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ public class RecipeAdapter
     private final Context mContext;
 
     /* Click interface */
-    private final RecipeAdapterOnClickHandler mClickHandler;
+    final private RecipeAdapterOnClickHandler mClickHandler;
 
     /* Recipes array */
     private ArrayList<Recipe> mRecipes;
@@ -35,7 +36,6 @@ public class RecipeAdapter
         mContext = context;
         mClickHandler = listener;
     }
-
 
     @NonNull
     @Override
@@ -73,12 +73,12 @@ public class RecipeAdapter
                             .getImage())
                     .placeholder(R.drawable.menu_placeholder)
                     .error(R.drawable.menu_placeholder)
-                    .into(holder.recipeThumbnaiIv);
+                    .into(holder.recipeThumbnailIv);
         } else {
             Picasso
                     .get()
                     .load(R.drawable.menu_placeholder)
-                    .into(holder.recipeThumbnaiIv);
+                    .into(holder.recipeThumbnailIv);
         }
 
         holder.recipeServingsTv.setText(String.valueOf(servings));
@@ -107,14 +107,14 @@ public class RecipeAdapter
             implements
             View.OnClickListener {
 
-        final ImageView recipeThumbnaiIv;
+        final ImageView recipeThumbnailIv;
         final TextView recipeTitleTv;
         final TextView recipeServingsTv;
 
         public RecipeAdapterViewHolder(View itemView) {
             super(itemView);
 
-            recipeThumbnaiIv = itemView.findViewById(R.id.recipe_list_item_thumbnail);
+            recipeThumbnailIv = itemView.findViewById(R.id.recipe_list_item_thumbnail);
             recipeTitleTv = itemView.findViewById(R.id.recipe_list_item_title);
             recipeServingsTv = itemView.findViewById(R.id.recipe_list_item_servings);
 
@@ -123,9 +123,9 @@ public class RecipeAdapter
 
         @Override
         public void onClick(View v) {
-            int clickedPosition = getAdapterPosition();
-            Recipe currentRecipe = mRecipes.get(clickedPosition);
-            mClickHandler.onClick(currentRecipe);
+            int adapterPosition = getAdapterPosition();
+            Recipe selectedRecipe = mRecipes.get(adapterPosition);
+            mClickHandler.onClick(selectedRecipe);
         }
     }
 }

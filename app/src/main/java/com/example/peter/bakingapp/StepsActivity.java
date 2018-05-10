@@ -10,6 +10,7 @@ import com.example.peter.bakingapp.model.Steps;
 import com.example.peter.bakingapp.ui.stepDetail.StepDetailFragment;
 
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
+import static com.example.peter.bakingapp.app.Constants.STEP;
 
 public class StepsActivity extends AppCompatActivity {
 
@@ -22,17 +23,20 @@ public class StepsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steps);
 
-        // Get the selected recipe
+        // Get the selected recipe and set the title
         Bundle incomingRecipe = getIntent().getExtras();
         Recipe recipe = incomingRecipe.getParcelable(SELECTED_RECIPE);
         setTitle(recipe.getTitle());
-
 
         mManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
             StepDetailFragment detailFragment = new StepDetailFragment();
             detailFragment.setArguments(incomingRecipe);
+
+            mManager.beginTransaction()
+                    .add(R.id.activity_steps_fragment_container, detailFragment)
+                    .commit();
         }
     }
 }

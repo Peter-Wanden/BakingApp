@@ -1,5 +1,6 @@
 package com.example.peter.bakingapp.ui.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,15 +13,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.peter.bakingapp.R;
+import com.example.peter.bakingapp.StepsActivity;
 import com.example.peter.bakingapp.model.Ingredient;
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.model.Steps;
+import com.example.peter.bakingapp.ui.stepDetail.StepDetailFragment;
 
 import java.util.ArrayList;
 
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
+import static com.example.peter.bakingapp.app.Constants.STEP;
 
-public class RecipeDetailFragment extends Fragment {
+public class RecipeDetailFragment
+        extends
+        Fragment
+        implements
+        RecipeDetailStepsAdapter.StepsAdapterOnCLickHandler {
 
     private static final String LOG_TAG = RecipeDetailFragment.class.getSimpleName();
 
@@ -71,7 +79,7 @@ public class RecipeDetailFragment extends Fragment {
         mIngredientsRecyclerView.setNestedScrollingEnabled(false);
 
         /* Setup and display the steps */
-        mStepsAdapter = new RecipeDetailStepsAdapter(getActivity(), null);
+        mStepsAdapter = new RecipeDetailStepsAdapter(getActivity(), this);
 
         mStepsLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL, false);
@@ -105,5 +113,14 @@ public class RecipeDetailFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(SELECTED_RECIPE, mSelectedRecipe);
+    }
+
+    /* Implementation of RecipeDetailStepsAdapter.StepsAdapterOnCLickHandler */
+    @Override
+    public void onClick(int selectedStepId) {
+        Intent intent = new Intent(getActivity(), StepsActivity.class);
+        intent.putExtra(SELECTED_RECIPE, mSelectedRecipe);
+        intent.putExtra(STEP, selectedStepId);
+        startActivity(intent);
     }
 }

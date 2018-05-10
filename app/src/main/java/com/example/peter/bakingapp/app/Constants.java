@@ -10,4 +10,7 @@ public class Constants {
 
     /* Key value for the recipe detail fragment parcelable object */
     public static final String RECIPE_DETAIL_FRAGMENT = "recipe_detail_fragment";
+
+    /* Key value for the ID of a step */
+    public static final String STEP = "step";
 }
