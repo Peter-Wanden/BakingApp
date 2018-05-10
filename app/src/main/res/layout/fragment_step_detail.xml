@@ -9,12 +9,21 @@
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/fragment_step_detail_video_view"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="0dp"
             android:background="@android:color/black"
             app:layout_constraintBottom_toTopOf="@+id/fragment_step_detail_step_text_layout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/fragment_step_detail_video_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_step_detail_step_text_layout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ScrollView
             android:id="@+id/fragment_step_detail_step_text_layout"

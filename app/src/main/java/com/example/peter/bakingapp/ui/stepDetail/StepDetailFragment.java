@@ -7,27 +7,34 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.databinding.FragmentStepDetailBinding;
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.model.Steps;
+import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
 import static com.example.peter.bakingapp.app.Constants.STEP;
@@ -38,10 +45,9 @@ public class StepDetailFragment
 
     private static final String LOG_TAG = StepDetailFragment.class.getSimpleName();
 
-    private FragmentStepDetailBinding stepDetailBinding;
+    private FragmentStepDetailBinding mStepDetailBinding;
     private ArrayList<Steps> mSteps;
     private int mStepId;
-    private Steps mCurrentStep;
 
     private SimpleExoPlayer mExoPlayer;
     private long mExoPlayerPosition = -1;
@@ -54,10 +60,10 @@ public class StepDetailFragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        stepDetailBinding = DataBindingUtil.inflate(inflater,
+        mStepDetailBinding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_step_detail, container, false);
 
-        return stepDetailBinding.getRoot();
+        return mStepDetailBinding.getRoot();
     }
 
     @Override
@@ -74,7 +80,7 @@ public class StepDetailFragment
         updateStep(mStepId);
 
         /* Setup the button actions */
-        stepDetailBinding.fragmentStepDetailStepButtonPrevious.setOnClickListener(new View.OnClickListener() {
+        mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mStepId > 0) {
@@ -84,38 +90,49 @@ public class StepDetailFragment
             }
         });
 
-        stepDetailBinding.fragmentStepDetailStepButtonNext.setOnClickListener(new View.OnClickListener() {
+        mStepDetailBinding.fragmentStepDetailStepButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mStepId < mSteps.size() -1) {
+                    releasePlayer();
                     mStepId ++;
                     updateStep(mStepId);
                 }
             }
         });
-
-        /* Setup the video player */
-        String videoUrl = mCurrentStep.getVideoUrl();
-        if (videoUrl != null && !videoUrl.isEmpty()) {
-
-        }
     }
 
     /* Updates to the Step information and button visibility */
     public void updateStep(int stepId) {
-        mCurrentStep = mSteps.get(stepId);
+        if (mExoPlayer != null) releasePlayer();
+        Steps mCurrentStep = mSteps.get(stepId);
+        String videoUrl = mCurrentStep.getVideoUrl();
+
         if (stepId == 0) {
-            stepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.INVISIBLE);
+            mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.INVISIBLE);
         } else {
-            stepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.VISIBLE);
+            mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.VISIBLE);
         }
         if (stepId == mSteps.size() -1) {
-            stepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.INVISIBLE);
+            mStepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.INVISIBLE);
         } else {
-            stepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.VISIBLE);
+            mStepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.VISIBLE);
         }
-        stepDetailBinding.fragmentStepDetailTitle.setText(mCurrentStep.getShortDescription());
-        stepDetailBinding.fragmentStepDetailDescription.setText(mCurrentStep.getDescription());
+        mStepDetailBinding.fragmentStepDetailTitle.setText(mCurrentStep.getShortDescription());
+        mStepDetailBinding.fragmentStepDetailDescription.setText(mCurrentStep.getDescription());
+
+        /* If there is a video, play it */
+        if (videoUrl != null && !videoUrl.isEmpty()) {
+            Uri uri = Uri.parse(videoUrl);
+            mStepDetailBinding.fragmentStepDetailVideoPlaceholder.setVisibility(View.GONE);
+            mStepDetailBinding.fragmentStepDetailVideoView.setVisibility(View.VISIBLE);
+            setupPlayer(uri);
+        } else {
+            /* If not show a placeholder image */
+            mStepDetailBinding.fragmentStepDetailVideoView.setVisibility(View.GONE);
+            mStepDetailBinding.fragmentStepDetailVideoPlaceholder.setVisibility(View.VISIBLE);
+            Picasso.get().load(R.drawable.menu_placeholder).into(mStepDetailBinding.fragmentStepDetailVideoPlaceholder);
+        }
     }
 
     /* Setup the player */
@@ -123,12 +140,41 @@ public class StepDetailFragment
         if (mExoPlayer == null) {
 
             BandwidthMeter meter = new DefaultBandwidthMeter();
+
             TrackSelection.Factory selectionFactory = new AdaptiveTrackSelection.Factory(meter);
             TrackSelector selector = new DefaultTrackSelector(selectionFactory);
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), selector);
 
+            mStepDetailBinding.fragmentStepDetailVideoView.setPlayer(mExoPlayer);
 
+            // Prepare the media source
+            DataSource.Factory factory = new DefaultDataSourceFactory(
+                    Objects.requireNonNull(getActivity()),
+                    Util.getUserAgent(getActivity(), "BakingApp"),
+                    new DefaultBandwidthMeter());
+
+            MediaSource source = new ExtractorMediaSource
+                    .Factory(factory)
+                    .createMediaSource(stepUri);
+
+            mExoPlayer.prepare(source);
+            mExoPlayer.setPlayWhenReady(true);
 
         }
+    }
+
+    /* Release the player */
+    private void releasePlayer() {
+        if (mExoPlayer !=  null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        releasePlayer();
     }
 }
