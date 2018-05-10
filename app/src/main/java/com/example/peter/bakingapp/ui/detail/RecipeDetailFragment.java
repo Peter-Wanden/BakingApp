@@ -1,25 +1,25 @@
 package com.example.peter.bakingapp.ui.detail;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.StepsActivity;
+import com.example.peter.bakingapp.databinding.FragmentRecipeDetailBinding;
 import com.example.peter.bakingapp.model.Ingredient;
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.model.Steps;
-import com.example.peter.bakingapp.ui.stepDetail.StepDetailFragment;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
 import static com.example.peter.bakingapp.app.Constants.STEP;
@@ -30,19 +30,8 @@ public class RecipeDetailFragment
         implements
         RecipeDetailStepsAdapter.StepsAdapterOnCLickHandler {
 
-    private static final String LOG_TAG = RecipeDetailFragment.class.getSimpleName();
-
+    private FragmentRecipeDetailBinding mDetailBinding;
     private Recipe mSelectedRecipe;
-
-    private ArrayList<Ingredient> mIngredients;
-    private RecyclerView mIngredientsRecyclerView;
-    private RecipeDetailIngredientAdapter mIngredientAdapter;
-    private LinearLayoutManager mIngredientsLayoutManager;
-
-    private ArrayList<Steps> mSteps;
-    private RecyclerView mStepsRecyclerView;
-    private RecipeDetailStepsAdapter mStepsAdapter;
-    private LinearLayoutManager mStepsLayoutManager;
 
     @Nullable
     @Override
@@ -51,16 +40,10 @@ public class RecipeDetailFragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(
+        mDetailBinding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_recipe_detail, container, false);
 
-        mIngredientsRecyclerView = rootView.findViewById(
-                R.id.fragment_recipe_detail_ingredients_recycler_view);
-
-        mStepsRecyclerView = rootView.findViewById(
-                R.id.fragment_recipe_detail_steps_recycler_view);
-
-        return rootView;
+        return mDetailBinding.getRoot();
     }
 
     @Override
@@ -68,29 +51,40 @@ public class RecipeDetailFragment
         super.onActivityCreated(savedInstanceState);
 
         /* Setup and display the ingredients */
-        mIngredientAdapter = new RecipeDetailIngredientAdapter(getActivity());
+        RecipeDetailIngredientAdapter mIngredientAdapter =
+                new RecipeDetailIngredientAdapter(getActivity());
 
-        mIngredientsLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
-                LinearLayoutManager.VERTICAL, false);
+        mDetailBinding.fragmentRecipeDetailIngredientsRecyclerView
+                .setAdapter(mIngredientAdapter);
 
-        mIngredientsRecyclerView.setLayoutManager(mIngredientsLayoutManager);
-        mIngredientsRecyclerView.setAdapter(mIngredientAdapter);
-        mIngredientsRecyclerView.setHasFixedSize(true);
-        mIngredientsRecyclerView.setNestedScrollingEnabled(false);
+        LinearLayoutManager mIngredientsLayoutManager =
+                new LinearLayoutManager(Objects
+                        .requireNonNull(getActivity())
+                        .getApplicationContext(), LinearLayoutManager
+                        .VERTICAL, false);
+
+        mDetailBinding.fragmentRecipeDetailIngredientsRecyclerView
+                .setLayoutManager(mIngredientsLayoutManager);
+        mDetailBinding.fragmentRecipeDetailIngredientsRecyclerView.setAdapter(mIngredientAdapter);
+        mDetailBinding.fragmentRecipeDetailIngredientsRecyclerView.setHasFixedSize(true);
+        mDetailBinding.fragmentRecipeDetailIngredientsRecyclerView.setNestedScrollingEnabled(false);
 
         /* Setup and display the steps */
-        mStepsAdapter = new RecipeDetailStepsAdapter(getActivity(), this);
+        RecipeDetailStepsAdapter mStepsAdapter =
+                new RecipeDetailStepsAdapter(getActivity(), this);
 
-        mStepsLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),
+        LinearLayoutManager mStepsLayoutManager =
+                new LinearLayoutManager(getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL, false);
 
-        mStepsRecyclerView.setLayoutManager(mStepsLayoutManager);
-        mStepsRecyclerView.setAdapter(mStepsAdapter);
-        mStepsRecyclerView.setHasFixedSize(true);
-        mStepsRecyclerView.setNestedScrollingEnabled(false);
+        mDetailBinding.fragmentRecipeDetailStepsRecyclerView.setLayoutManager(mStepsLayoutManager);
+        mDetailBinding.fragmentRecipeDetailStepsRecyclerView.setAdapter(mStepsAdapter);
+        mDetailBinding.fragmentRecipeDetailStepsRecyclerView.setHasFixedSize(true);
+        mDetailBinding.fragmentRecipeDetailStepsRecyclerView.setNestedScrollingEnabled(false);
 
         /* If it exists get the selected recipe form the intent */
-        if (savedInstanceState == null && getArguments().getParcelable(SELECTED_RECIPE) != null) {
+        if (savedInstanceState == null && (getArguments() != null ? getArguments()
+                .getParcelable(SELECTED_RECIPE) : null) != null) {
                 mSelectedRecipe = getArguments().getParcelable(SELECTED_RECIPE);
         }
 
@@ -102,10 +96,11 @@ public class RecipeDetailFragment
             mSelectedRecipe = savedInstanceState.getParcelable(SELECTED_RECIPE);
         }
 
-        mIngredients = mSelectedRecipe.getIngredients();
+        ArrayList<Ingredient> mIngredients =
+                mSelectedRecipe != null ? mSelectedRecipe.getIngredients() : null;
         mIngredientAdapter.newIngredients(mIngredients);
 
-        mSteps = mSelectedRecipe.getSteps();
+        ArrayList<Steps> mSteps = mSelectedRecipe.getSteps();
         mStepsAdapter.swapSteps(mSteps);
     }
 

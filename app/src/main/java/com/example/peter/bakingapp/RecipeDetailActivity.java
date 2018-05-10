@@ -16,7 +16,6 @@ import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = RecipeDetailActivity.class.getSimpleName();
     private RecipeDetailFragment mDetailFragment;
 
     @Override
@@ -28,13 +27,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         /* Set the title */
-        Recipe recipe = bundle.getParcelable(SELECTED_RECIPE);
-        setTitle(recipe.getTitle());
+        Recipe recipe = bundle != null ? (Recipe) bundle.getParcelable(SELECTED_RECIPE) : null;
+        setTitle(recipe != null ? recipe.getTitle() : null);
 
         FragmentManager mManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
+
             mDetailFragment = new RecipeDetailFragment();
+
             // Add the recipe to the fragments arguments
             mDetailFragment.setArguments(bundle);
             mManager.beginTransaction().add(R.id.recipe_detail_container, mDetailFragment).commit();

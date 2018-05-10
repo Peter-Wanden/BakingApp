@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_recipe_detail_scroll_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/fragment_recipe_detail_ingredients_title_tv"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/fragment_recipe_detail_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/CardViewTitleText"
-        android:text="@string/fragment_recipe_detail_ingredients_title"/>
+        android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_recipe_detail_ingredients_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/fragment_recipe_detail_steps_title_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/CardViewTitleText"
-        android:text="@string/fragment_recipe_detail_steps_title"/>
+            <TextView
+                android:id="@+id/fragment_recipe_detail_ingredients_title_tv"
+                style="@style/CardViewTitleText"
+                android:layout_width="match_parent"
+                android:text="@string/fragment_recipe_detail_ingredients_title" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_recipe_detail_steps_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_recipe_detail_ingredients_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-</LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/fragment_recipe_detail_steps_title_tv"
+                style="@style/CardViewTitleText"
+                android:layout_width="match_parent"
+                android:text="@string/fragment_recipe_detail_steps_title" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_recipe_detail_steps_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

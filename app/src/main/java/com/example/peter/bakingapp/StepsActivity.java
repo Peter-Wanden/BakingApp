@@ -16,8 +16,6 @@ public class StepsActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = StepsActivity.class.getSimpleName();
 
-    private FragmentManager mManager;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,10 +23,12 @@ public class StepsActivity extends AppCompatActivity {
 
         // Get the selected recipe and set the title
         Bundle incomingRecipe = getIntent().getExtras();
-        Recipe recipe = incomingRecipe.getParcelable(SELECTED_RECIPE);
-        setTitle(recipe.getTitle());
+        Recipe recipe = incomingRecipe != null ? (Recipe)
+                incomingRecipe.getParcelable(SELECTED_RECIPE) : null;
 
-        mManager = getSupportFragmentManager();
+        setTitle(recipe != null ? recipe.getTitle() : null);
+
+        FragmentManager mManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
             StepDetailFragment detailFragment = new StepDetailFragment();

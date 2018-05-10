@@ -1,6 +1,7 @@
 package com.example.peter.bakingapp.ui.recipe;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,16 +10,14 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.RecipeDetailActivity;
+import com.example.peter.bakingapp.databinding.FragmentRecipesBinding;
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.utils.NetworkUtils;
 import com.example.peter.bakingapp.utils.RecipeLoader;
@@ -36,15 +35,10 @@ public class RecipeFragment
         LoaderManager.LoaderCallbacks<ArrayList<Recipe>>,
         RecipeAdapter.RecipeAdapterOnClickHandler {
 
-    private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
+    private FragmentRecipesBinding mRecipesBinding;
     private static final int RECIPE_LOADER_ID = 100;
     private ArrayList<Recipe> mRecipes;
-    private View mLoadingIndicator;
-    private TextView mEmptyStateTextView;
-    private RecyclerView mRecyclerView;
     private RecipeAdapter mRecipeAdapter;
-    private LinearLayoutManager mLinearLayoutManager;
-    private GridLayoutManager mGridLayoutManager;
 
     @Nullable
     @Override
@@ -53,19 +47,10 @@ public class RecipeFragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(
+        mRecipesBinding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_recipes, container, false);
 
-        mRecyclerView = rootView.findViewById(
-                R.id.fragment_recipes_recycler_view);
-
-        mLoadingIndicator = rootView.findViewById(
-                R.id.fragment_recipes_progress_bar);
-
-        mEmptyStateTextView = rootView.findViewById(
-                R.id.fragment_recipes_empty_view);
-
-        return rootView;
+        return mRecipesBinding.getRoot();
     }
 
     @Override
@@ -73,7 +58,7 @@ public class RecipeFragment
         super.onActivityCreated(savedInstanceState);
 
         mRecipeAdapter = new RecipeAdapter(getActivity(), this);
-        mRecyclerView.setAdapter(mRecipeAdapter);
+        mRecipesBinding.fragmentRecipesRecyclerView.setAdapter(mRecipeAdapter);
 
         /* Create RecyclerViews with dynamic widths depending on the display type. */
         // Portrait for phone.
@@ -83,30 +68,26 @@ public class RecipeFragment
         if (getResources().getBoolean(R.bool.is_tablet) ||
                 getResources().getBoolean(R.bool.is_landscape)) {
 
-            mGridLayoutManager = new GridLayoutManager(getActivity()
-                    .getApplicationContext(),
-                    columnCalculator());
+            GridLayoutManager mGridLayoutManager = new GridLayoutManager(
+                    Objects.requireNonNull(getActivity())
+                    .getApplicationContext(), columnCalculator());
 
-            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            mRecipesBinding.fragmentRecipesRecyclerView.setLayoutManager(mGridLayoutManager);
 
         } else {
-            mLinearLayoutManager = new
-                    LinearLayoutManager(getActivity().getApplicationContext(),
+            LinearLayoutManager mLinearLayoutManager = new
+                    LinearLayoutManager(Objects.requireNonNull(getActivity())
+                    .getApplicationContext(),
                     LinearLayoutManager.VERTICAL, false);
 
-            mRecyclerView.setLayoutManager(mLinearLayoutManager);
+            mRecipesBinding.fragmentRecipesRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         }
 
-        mRecyclerView.setHasFixedSize(true);
+        mRecipesBinding.fragmentRecipesRecyclerView.setHasFixedSize(true);
 
         /* Check for connectivity */
         if (NetworkUtils.getNetworkStatus(Objects.requireNonNull(getActivity()))) {
-
-            /* Ensures a loader is initialized and active. If the loader doesn't already
-             * exist, one is created and (if the activity/fragment is currently started)
-             * starts the loader. Otherwise the last created loader is re-used.
-             */
             getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
         }
     }
@@ -115,7 +96,10 @@ public class RecipeFragment
     private int columnCalculator() {
 
         DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Objects.requireNonNull(getActivity())
+                .getWindowManager()
+                .getDefaultDisplay()
+                .getMetrics(metrics);
 
         // Width of smallest tablet
         int divider = 600;
@@ -158,17 +142,17 @@ public class RecipeFragment
         mRecipes = null;
     }
 
-    /* Data loading and results states */
+    /* Data loading and result states */
     private void indicateLoading() {
-        mLoadingIndicator.setVisibility(View.VISIBLE);
+        mRecipesBinding.fragmentRecipesProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void showResults() {
-        mLoadingIndicator.setVisibility(View.GONE);
+        mRecipesBinding.fragmentRecipesProgressBar.setVisibility(View.GONE);
     }
 
     private void noDataAvailable() {
         showResults();
-        mEmptyStateTextView.setVisibility(View.VISIBLE);
+        mRecipesBinding.fragmentRecipesEmptyView.setVisibility(View.VISIBLE);
     }
 }

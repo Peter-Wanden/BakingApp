@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.peter.bakingapp.R;
+import com.example.peter.bakingapp.databinding.FragmentStepDetailBinding;
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.model.Steps;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -37,10 +38,9 @@ public class StepDetailFragment
 
     private static final String LOG_TAG = StepDetailFragment.class.getSimpleName();
 
-    private TextView mStepTitle, mStepDescription;
+    private FragmentStepDetailBinding stepDetailBinding;
     private ArrayList<Steps> mSteps;
     private int mStepId;
-    private Button mPrevious, mNext;
     private Steps mCurrentStep;
 
     private SimpleExoPlayer mExoPlayer;
@@ -54,16 +54,10 @@ public class StepDetailFragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(
+        stepDetailBinding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_step_detail, container, false);
 
-        mExoPlayer = rootView.findViewById(R.id.fragment_step_detail_video_view);
-        mStepTitle = rootView.findViewById(R.id.fragment_step_detail_title);
-        mStepDescription = rootView.findViewById(R.id.fragment_step_detail_description);
-        mPrevious = rootView.findViewById(R.id.fragment_step_detail_step_button_previous);
-        mNext = rootView.findViewById(R.id.fragment_step_detail_step_button_next);
-
-        return rootView;
+        return stepDetailBinding.getRoot();
     }
 
     @Override
@@ -76,10 +70,11 @@ public class StepDetailFragment
         mSteps = incomingRecipe != null ? incomingRecipe.getSteps() : null;
         mStepId = getArguments().getInt(STEP);
 
+        /* Update the display */
         updateStep(mStepId);
 
-        /* Setup the buton actions */
-        mPrevious.setOnClickListener(new View.OnClickListener() {
+        /* Setup the button actions */
+        stepDetailBinding.fragmentStepDetailStepButtonPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mStepId > 0) {
@@ -89,7 +84,7 @@ public class StepDetailFragment
             }
         });
 
-        mNext.setOnClickListener(new View.OnClickListener() {
+        stepDetailBinding.fragmentStepDetailStepButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mStepId < mSteps.size() -1) {
@@ -110,17 +105,17 @@ public class StepDetailFragment
     public void updateStep(int stepId) {
         mCurrentStep = mSteps.get(stepId);
         if (stepId == 0) {
-            mPrevious.setVisibility(View.INVISIBLE);
+            stepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.INVISIBLE);
         } else {
-            mPrevious.setVisibility(View.VISIBLE);
+            stepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.VISIBLE);
         }
         if (stepId == mSteps.size() -1) {
-            mNext.setVisibility(View.INVISIBLE);
+            stepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.INVISIBLE);
         } else {
-            mNext.setVisibility(View.VISIBLE);
+            stepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.VISIBLE);
         }
-        mStepTitle.setText(mCurrentStep.getShortDescription());
-        mStepDescription.setText(mCurrentStep.getDescription());
+        stepDetailBinding.fragmentStepDetailTitle.setText(mCurrentStep.getShortDescription());
+        stepDetailBinding.fragmentStepDetailDescription.setText(mCurrentStep.getDescription());
     }
 
     /* Setup the player */
@@ -131,6 +126,7 @@ public class StepDetailFragment
             TrackSelection.Factory selectionFactory = new AdaptiveTrackSelection.Factory(meter);
             TrackSelector selector = new DefaultTrackSelector(selectionFactory);
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), selector);
+
 
 
         }
