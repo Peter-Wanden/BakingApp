@@ -20,6 +20,7 @@
             android:id="@+id/fragment_step_detail_video_placeholder"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:contentDescription="@string/fragment_step_detail_image_placeholder"
             app:layout_constraintBottom_toTopOf="@+id/fragment_step_detail_step_text_layout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -41,13 +42,11 @@
 
                 <TextView
                     android:id="@+id/fragment_step_detail_title"
-                    style="@style/CardViewTitleText"
-                    android:text="This is the Step Title" />
+                    style="@style/CardViewTitleText"/>
 
                 <TextView
                     android:id="@+id/fragment_step_detail_description"
-                    style="@style/CardViewSubText"
-                    android:text="This iis the steps specific instructions. They could go on for some time / or length whichever you prefer." />
+                    style="@style/CardViewSubText"/>
             </LinearLayout>
         </ScrollView>
 

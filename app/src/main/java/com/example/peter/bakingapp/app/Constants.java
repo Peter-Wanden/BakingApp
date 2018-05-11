@@ -13,4 +13,8 @@ public class Constants {
 
     /* Key value for the ID of a step */
     public static final String STEP = "step";
+
+    /* ExoPlayer position and states key */
+    public static final String PLAYER_POSITION = "player_position";
+    public static final String PLAYER_STATE = "player_state";
 }
