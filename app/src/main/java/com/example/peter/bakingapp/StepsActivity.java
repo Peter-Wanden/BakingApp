@@ -6,11 +6,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.peter.bakingapp.model.Recipe;
-import com.example.peter.bakingapp.model.Steps;
 import com.example.peter.bakingapp.ui.stepDetail.StepDetailFragment;
 
+import static android.view.Window.FEATURE_NO_TITLE;
+import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
-import static com.example.peter.bakingapp.app.Constants.STEP;
 
 public class StepsActivity extends AppCompatActivity {
 
@@ -19,6 +19,16 @@ public class StepsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /* If a phone in landscape mode, hide the title */
+        if (getResources().getBoolean(R.bool.is_landscape)
+                && !getResources().getBoolean(R.bool.is_tablet)) {
+            requestWindowFeature(FEATURE_NO_TITLE);
+
+            this.getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
+
+             getSupportActionBar().hide();
+        }
         setContentView(R.layout.activity_steps);
 
         // Get the selected recipe and set the title

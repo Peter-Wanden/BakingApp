@@ -47,8 +47,9 @@ public class StepDetailFragment
 
     /* Screen members */
     private FragmentStepDetailBinding mStepDetailBinding;
-    private boolean mFullScreen = false;
-    private boolean mTwoPane = false;
+    private boolean mTablet;
+    private boolean mLandscape;
+    private Steps mCurrentStep;
 
     /* Data members */
     private ArrayList<Steps> mSteps;
@@ -66,6 +67,8 @@ public class StepDetailFragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
+        mLandscape = getActivity().getResources().getBoolean(R.bool.is_landscape);
+        mTablet = getActivity().getResources().getBoolean(R.bool.is_tablet);
 
         mStepDetailBinding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_step_detail, container, false);
@@ -80,8 +83,15 @@ public class StepDetailFragment
         /* Get the recipe and Steps objects */
         Recipe incomingRecipe = getArguments() != null ? (Recipe)
                 getArguments().getParcelable(SELECTED_RECIPE) : null;
+
         mSteps = incomingRecipe != null ? incomingRecipe.getSteps() : null;
-        mStepId = getArguments().getInt(STEP);
+        mStepId = getArguments().getInt(STEP, -1);
+
+        if (mStepId != -1) {
+            mCurrentStep = mSteps.get(mStepId);
+            } else {
+            mStepId = 0;
+        }
 
         /* If being created due to a configuration change, get the saved configuration values */
         if (savedInstanceState != null && savedInstanceState.containsKey(PLAYER_POSITION)) {
@@ -89,67 +99,44 @@ public class StepDetailFragment
             mPlayIfReady = savedInstanceState.getBoolean(PLAYER_STATE);
         }
 
-        /* Update the display */
-        updateStep(mStepId);
-
-        /* Setup the button actions */
-        mStepDetailBinding.fragmentStepDetailStepButtonPrevious
-                .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mStepId > 0) {
-                    mStepId --;
-                }
-                releasePlayer();
-                mPlayIfReady = true;
-                updateStep(mStepId);
-            }
-        });
-
-        mStepDetailBinding.fragmentStepDetailStepButtonNext
-                .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mStepId < mSteps.size() -1) {
-                    mStepId ++;
-                }
-                releasePlayer();
-                mPlayIfReady = true;
-                updateStep(mStepId);
-            }
-        });
+        updateStep();
     }
 
-    /* Updates the Step information and button visibility */
-    public void updateStep(int stepId) {
+    /* Updates the Step information */
+    public void updateStep() {
+        mCurrentStep = mSteps.get(mStepId);
+        String videoUrl = mCurrentStep.getVideoUrl();
+
+        /* Release the player from its previous state */
         if (mExoPlayer != null) {
             releasePlayer();
         }
 
-        Steps mCurrentStep = mSteps.get(stepId);
-        String videoUrl = mCurrentStep.getVideoUrl();
+        /* Setup for phone in portrait */
+        if (!mTablet && !mLandscape) {
+            updateButtonVisibility();
+            configureButtons();
+            setDescriptionText();
+        }
 
-        if (stepId == 0) {
-            mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.INVISIBLE);
-        } else {
-            mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.VISIBLE);
+        /* Setup for tablet in portrait & landscape*/
+        if (mTablet) {
+            setDescriptionText();
         }
-        if (stepId == mSteps.size() -1) {
-            mStepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.INVISIBLE);
-        } else {
-            mStepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.VISIBLE);
-        }
-        mStepDetailBinding.fragmentStepDetailTitle.setText(mCurrentStep.getShortDescription());
-        mStepDetailBinding.fragmentStepDetailDescription.setText(mCurrentStep.getDescription());
 
         /* If there is a video, play it */
         if (videoUrl != null && !videoUrl.isEmpty()) {
             Uri uri = Uri.parse(videoUrl);
+
+            /* Set the correct view visibilities for playing a video */
             mStepDetailBinding.fragmentStepDetailVideoPlaceholder.setVisibility(View.INVISIBLE);
             mStepDetailBinding.fragmentStepDetailVideoView.setVisibility(View.VISIBLE);
+
             setupPlayer(uri);
+
         } else {
-            /* If not show a placeholder image */
+
+            /* If not, set the correct view visibilities and show a placeholder image */
             mStepDetailBinding.fragmentStepDetailVideoView.setVisibility(View.INVISIBLE);
             mStepDetailBinding.fragmentStepDetailVideoPlaceholder.setVisibility(View.VISIBLE);
 
@@ -163,24 +150,33 @@ public class StepDetailFragment
     private void setupPlayer(Uri stepUri) {
         if (mExoPlayer == null) {
 
+            /* Estimate the available bandwidth */
             BandwidthMeter meter = new DefaultBandwidthMeter();
 
+            /* Select the highest quality stream based on the available bandwidth */
             TrackSelection.Factory selectionFactory = new AdaptiveTrackSelection.Factory(meter);
+
+            /* Select the track based on the bandwidth and stream info */
             TrackSelector selector = new DefaultTrackSelector(selectionFactory);
+
+            /* Create a player instance and pass in the configuration info */
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), selector);
 
+            /* Attach the player to the view */
             mStepDetailBinding.fragmentStepDetailVideoView.setPlayer(mExoPlayer);
 
-            // Prepare the media source
+            /* Prepare the media source */
             DataSource.Factory factory = new DefaultDataSourceFactory(
                     Objects.requireNonNull(getActivity()),
                     Util.getUserAgent(getActivity(), "BakingApp"),
                     new DefaultBandwidthMeter());
 
+            /* Loads data from the Uri */
             MediaSource source = new ExtractorMediaSource
                     .Factory(factory)
                     .createMediaSource(stepUri);
 
+            /* Prep the player with the data source */
             mExoPlayer.prepare(source);
 
             /* If a configuration change has taken place, restore previous values */
@@ -190,6 +186,7 @@ public class StepDetailFragment
                 mExoPlayer.setPlayWhenReady(mPlayIfReady);
             }
 
+            /* Play or pause the media */
             mExoPlayer.setPlayWhenReady(mPlayIfReady);
         }
     }
@@ -220,5 +217,54 @@ public class StepDetailFragment
             outState.putBoolean(PLAYER_STATE, mExoPlayer.getPlayWhenReady());
         }
         releasePlayer();
+    }
+
+    /* Configure the previous and next buttons */
+    public void configureButtons() {
+
+        mStepDetailBinding.fragmentStepDetailStepButtonPrevious
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mStepId > 0) {
+                            mStepId --;
+                        }
+                        mPlayIfReady = true;
+                        updateStep();
+                    }
+                });
+
+        mStepDetailBinding.fragmentStepDetailStepButtonNext
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mStepId < mSteps.size() -1) {
+                            mStepId ++;
+                        }
+                        mPlayIfReady = true;
+                        updateStep();
+                    }
+                });
+    }
+
+    /* Update the buttons visibility */
+    private void updateButtonVisibility() {
+
+            if (mStepId == 0) {
+                mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.INVISIBLE);
+            } else {
+                mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.VISIBLE);
+            }
+            if (mStepId == mSteps.size() - 1) {
+                mStepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.INVISIBLE);
+            } else {
+                mStepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.VISIBLE);
+            }
+    }
+
+    /* Set the description text */
+    private void setDescriptionText(){
+        mStepDetailBinding.fragmentStepDetailTitle.setText(mCurrentStep.getShortDescription());
+        mStepDetailBinding.fragmentStepDetailDescription.setText(mCurrentStep.getDescription());
     }
 }
