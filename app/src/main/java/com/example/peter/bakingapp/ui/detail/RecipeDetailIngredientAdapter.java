@@ -45,6 +45,13 @@ public class RecipeDetailIngredientAdapter
         /* Get the ingredient at the passed in position */
         Ingredient ingredients = mIngredients.get(position);
 
+        /* Set the color of the TextViews, white if tablet, black if phone */
+        if (mContext.getResources().getBoolean(R.bool.is_tablet)){
+            holder.quantityTV.setTextColor(mContext.getResources().getColor(R.color.white));
+            holder.measureTV.setTextColor(mContext.getResources().getColor(R.color.white));
+            holder.ingredientTV.setTextColor(mContext.getResources().getColor(R.color.white));
+        }
+
         /* Get the fields we're interested in, format then display them */
         DecimalFormat decimalFormat = new DecimalFormat("####.####");
         holder.quantityTV.setText(decimalFormat.format(ingredients.getQuantity()));

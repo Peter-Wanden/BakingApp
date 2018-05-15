@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.FrameLayout;
+import android.util.Log;
 
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.ui.detail.RecipeDetailFragment;
@@ -12,11 +12,21 @@ import com.example.peter.bakingapp.ui.stepDetail.StepDetailFragment;
 
 import static com.example.peter.bakingapp.app.Constants.RECIPE_DETAIL_FRAGMENT;
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
+import static com.example.peter.bakingapp.app.Constants.STEP;
 
 
-public class RecipeDetailActivity extends AppCompatActivity {
+public class RecipeDetailActivity
+        extends
+        AppCompatActivity
+        implements
+        RecipeDetailFragment.OnStepSelectedListener {
 
-    private RecipeDetailFragment mDetailFragment;
+    private static final String LOG_TAG = RecipeDetailActivity.class.getSimpleName();
+
+    private RecipeDetailFragment mRecipeDetailFragment;
+    private StepDetailFragment mStepDetailFragment;
+    private Bundle mSelectedRecipe;
+    public FragmentManager mFragmentManager;
 
 
     @Override
@@ -25,34 +35,30 @@ public class RecipeDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_detail);
 
         /* Get the selected recipe */
-        Bundle selectedRecipe = getIntent().getExtras();
+        mSelectedRecipe = getIntent().getExtras();
 
         /* Set the title */
-        Recipe recipe = selectedRecipe != null ? (Recipe)
-                selectedRecipe.getParcelable(SELECTED_RECIPE) : null;
+        Recipe recipe = mSelectedRecipe != null ? (Recipe)
+                mSelectedRecipe.getParcelable(SELECTED_RECIPE) : null;
+
         setTitle(recipe != null ? recipe.getTitle() : null);
 
-        FragmentManager manager = getSupportFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
 
-            mDetailFragment = new RecipeDetailFragment();
+            mRecipeDetailFragment = new RecipeDetailFragment();
 
             // Add the recipe to the fragments arguments
-            mDetailFragment.setArguments(selectedRecipe);
-            manager.beginTransaction()
-                    .add(R.id.activity_recipe_detail_container, mDetailFragment)
+            mRecipeDetailFragment.setArguments(mSelectedRecipe);
+            mFragmentManager.beginTransaction()
+                    .add(R.id.activity_recipe_detail_container, mRecipeDetailFragment)
                     .commit();
 
             // If this is a tablet, fill the second view pane with step detail
             if (getResources().getBoolean(R.bool.is_tablet)) {
-
-                StepDetailFragment stepDetailFragment = new StepDetailFragment();
-                stepDetailFragment.setArguments(selectedRecipe);
-
-                manager.beginTransaction()
-                        .add(R.id.activity_steps_fragment_container, stepDetailFragment)
-                        .commit();
+                // This will always be the default step
+                showNewStep(-1);
             }
         }
     }
@@ -60,14 +66,33 @@ public class RecipeDetailActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         getSupportFragmentManager().putFragment(outState,
-                RECIPE_DETAIL_FRAGMENT, mDetailFragment);
+                RECIPE_DETAIL_FRAGMENT, mRecipeDetailFragment);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mDetailFragment = (RecipeDetailFragment) getSupportFragmentManager().getFragment(
+        mRecipeDetailFragment = (RecipeDetailFragment) getSupportFragmentManager().getFragment(
                 savedInstanceState, RECIPE_DETAIL_FRAGMENT);
+    }
+
+
+    /* Interface from StepDetailFragment, passes in the selected StepId when in tablet mode */
+    @Override
+    public void onStepSelected(int stepId) {
+        showNewStep(stepId);
+    }
+
+    /* Creates a new StepDetailFragment */
+    private void showNewStep (int stepId) {
+
+        mSelectedRecipe.putInt(STEP, stepId);
+        mStepDetailFragment = new StepDetailFragment();
+        mStepDetailFragment.setArguments(mSelectedRecipe);
+
+        mFragmentManager.beginTransaction()
+        .replace(R.id.activity_steps_fragment_container, mStepDetailFragment)
+        .commit();
     }
 }

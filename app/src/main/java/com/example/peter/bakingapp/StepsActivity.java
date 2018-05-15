@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.ui.stepDetail.StepDetailFragment;
 
+import java.util.Objects;
+
 import static android.view.Window.FEATURE_NO_TITLE;
 import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
@@ -27,7 +29,7 @@ public class StepsActivity extends AppCompatActivity {
 
             this.getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
 
-             getSupportActionBar().hide();
+             Objects.requireNonNull(getSupportActionBar()).hide();
         }
         setContentView(R.layout.activity_steps);
 

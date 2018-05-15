@@ -60,6 +60,11 @@ public class RecipeDetailStepsAdapter
         /* Get the fields we're interested in */
         String shortDescription = currentStep.getShortDescription();
 
+        /* set the colors of the view */
+        if (mContext.getResources().getBoolean(R.bool.is_tablet)){
+            holder.stepTv.setTextColor(mContext.getResources().getColor(R.color.white));
+        }
+
         /* Apply the fields to the views */
         holder.stepTv.setText(shortDescription);
     }
