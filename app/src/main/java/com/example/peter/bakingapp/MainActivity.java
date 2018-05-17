@@ -17,8 +17,10 @@ public class MainActivity
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    // ToDo - Store the recipe ID in shared prefs in case data is lost and for populating widget
     // ToDo - Check for correct handling of network status
+    // ToDo - Make widget look nice
+    // ToDo - ReadMe file with libraries and what they were used for
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

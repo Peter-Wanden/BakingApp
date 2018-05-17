@@ -1,17 +1,17 @@
-package com.example.peter.bakingapp;
+package com.example.peter.bakingapp.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
+import com.example.peter.bakingapp.MainActivity;
+import com.example.peter.bakingapp.R;
+
 import static com.example.peter.bakingapp.app.Constants.RECIPE_TITLE;
-import static com.example.peter.bakingapp.app.Constants.WIDGET_ID;
-import static com.example.peter.bakingapp.app.Constants.WIDGET_REQUEST_RECIPE;
 
 /**
  * Implementation of App Widget functionality.
@@ -26,19 +26,7 @@ public class WidgetProvider
                                 AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        // TODO - Movie this lot into its own routines
-
-        // Construct the RemoteViews object to update the widget
-        RemoteViews remoteViews = new RemoteViews(
-                context.getPackageName(),
-                R.layout.recipe_widget_provider);
-
-        // An intent that launches the MainActivity when the widget button is clicked.
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(WIDGET_REQUEST_RECIPE, true);
-        intent.putExtra(WIDGET_ID, appWidgetId);
-        PendingIntent pendingIntent = PendingIntent
-                .getActivity(context, 0, intent, 0);
+        RemoteViews remoteViews = getRemoteViews(context);
 
         // Get the recipe title from shared preferences
         String recipeTitle = PreferenceManager
@@ -46,34 +34,48 @@ public class WidgetProvider
                 .getString(RECIPE_TITLE, "");
 
         // Set the recipe title in the widget
-        remoteViews.setTextViewText(R.id.recipe_widget_provider_recipe_title, recipeTitle);
+        remoteViews.setTextViewText(
+                R.id.recipe_widget_provider_recipe_title, recipeTitle);
 
-        // Set the ingredients to the remote adapter
-        Intent ingredientService = new Intent(context, WidgetServiceList.class);
-        ingredientService.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        ingredientService.setData(Uri.parse(ingredientService.toUri(Intent.URI_INTENT_SCHEME)));
-
-
-        // Set the ListView and the adapter to the remote view
-        remoteViews.setRemoteAdapter(
-                R.id.recipe_widget_provider_ingredients_list, ingredientService);
-        remoteViews.setEmptyView(
-                R.id.recipe_widget_provider_ingredients_list, R.id.empty_view);
-
-        // Widgets only allow click handlers to launch PendingIntents
-        remoteViews.setOnClickPendingIntent(R.id.recipe_widget_provider_add_button, pendingIntent);
+        // Runs onDataSetChanged() in the WidgetServiceList.class (the adapter for the Ingredients)
+        appWidgetManager.notifyAppWidgetViewDataChanged(
+                appWidgetId, R.id.recipe_widget_provider_ingredients_list);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-        // Runs onDataSetChanged() in the WidgetServiceList.class (the adapter for the Ingredients)
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.recipe_widget_provider_ingredients_list);
     }
 
+    // Cycles through available widgets and updates them
     public static void updateAppWidgets(Context context, AppWidgetManager widgetManager,
                                         int[] appWidgetIds){
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, widgetManager, appWidgetId);
         }
+    }
+
+    private static RemoteViews getRemoteViews (Context context) {
+
+        // Construct the RemoteViews object to update the widget
+        RemoteViews remoteViews = new RemoteViews(
+                context.getPackageName(),
+                R.layout.recipe_widget_provider);
+
+        // Set the WidgetServiceList intent to act as the adapter for the ListView
+        Intent intentAdapter = new Intent(context, WidgetServiceList.class);
+        remoteViews.setRemoteAdapter(R.id.recipe_widget_provider_ingredients_list, intentAdapter);
+
+        // An intent that launches the MainActivity when the widget button is clicked.
+        Intent intentActivity = new Intent(context, MainActivity.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                        context,
+                        0,
+                        intentActivity,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        remoteViews.setOnClickPendingIntent(R.id.recipe_widget_provider_add_button, pendingIntent);
+
+        return remoteViews;
     }
 
     /*

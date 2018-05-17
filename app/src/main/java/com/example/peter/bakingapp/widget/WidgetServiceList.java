@@ -1,13 +1,12 @@
-package com.example.peter.bakingapp;
+package com.example.peter.bakingapp.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.model.Ingredient;
 import com.example.peter.bakingapp.utils.GsonUtils;
 
@@ -30,32 +29,15 @@ public class WidgetServiceList
             implements
             RemoteViewsService.RemoteViewsFactory {
 
-        private final String LOG_TAG = WidgetServiceList.class.getSimpleName();
-
-        // TODO Is the widget ID being saved and restored from shared preferences?
-
         private Context mContext;
         private List<Ingredient> mIngredients = Collections.emptyList();
-        private SharedPreferences mPreferences;
-        private int mWidgetId;
-
 
         public ListRemoteViewsFactory(Context applicationContext) {
-
             mContext = applicationContext;
-
-            this.mPreferences = mContext.getSharedPreferences(
-                    String.valueOf(mWidgetId), MODE_PRIVATE);
-
-//            mWidgetId = intent.getIntExtra(
-//                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            Log.e(LOG_TAG, "called");
         }
 
         @Override
         public void onCreate() {
-
         }
 
         /*

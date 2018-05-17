@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.RecipeDetailActivity;
-import com.example.peter.bakingapp.WidgetService;
+import com.example.peter.bakingapp.widget.WidgetService;
 import com.example.peter.bakingapp.databinding.FragmentRecipesBinding;
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.utils.GsonUtils;
