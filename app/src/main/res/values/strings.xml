@@ -10,4 +10,7 @@
     <string name="previous_button">Previous</string>
     <string name="next_button">Next</string>
     <string name="fragment_step_detail_image_placeholder">An image in place of a video</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_empty_view">Please select a recipe to see its ingredients.</string>
 </resources>

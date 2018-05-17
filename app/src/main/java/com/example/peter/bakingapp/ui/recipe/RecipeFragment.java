@@ -1,8 +1,10 @@
 package com.example.peter.bakingapp.ui.recipe;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,14 +19,18 @@ import android.view.ViewGroup;
 
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.RecipeDetailActivity;
+import com.example.peter.bakingapp.WidgetService;
 import com.example.peter.bakingapp.databinding.FragmentRecipesBinding;
 import com.example.peter.bakingapp.model.Recipe;
+import com.example.peter.bakingapp.utils.GsonUtils;
 import com.example.peter.bakingapp.utils.NetworkUtils;
 import com.example.peter.bakingapp.utils.RecipeLoader;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static com.example.peter.bakingapp.app.Constants.RECIPE_INGREDIENTS;
+import static com.example.peter.bakingapp.app.Constants.RECIPE_TITLE;
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
 
 
@@ -34,6 +40,8 @@ public class RecipeFragment
         implements
         LoaderManager.LoaderCallbacks<ArrayList<Recipe>>,
         RecipeAdapter.RecipeAdapterOnClickHandler {
+
+    private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
 
     private FragmentRecipesBinding mRecipesBinding;
     private static final int RECIPE_LOADER_ID = 100;
@@ -113,6 +121,24 @@ public class RecipeFragment
     /* Implements the onClick interface in the Recipe adapter */
     @Override
     public void onClick(Recipe selectedRecipe) {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        /*
+        Store the recipe title and ingredient list (converted to JSON) in shared preferences
+        This will be the base information for the widget.
+        */
+        preferences
+                .edit()
+                .putString(RECIPE_TITLE, selectedRecipe.getTitle())
+                .putString(RECIPE_INGREDIENTS, GsonUtils
+                        .ingredientsToJson(selectedRecipe.getIngredients()))
+                .apply();
+
+        /* Update the widget with the selected recipe */
+        WidgetService.startActionUpdateWidget(getActivity());
+
+        // Open the recipe detail activity and pass in the new recipe
         Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
         intent.putExtra(SELECTED_RECIPE, selectedRecipe);
         startActivity(intent);

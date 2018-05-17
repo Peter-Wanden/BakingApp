@@ -1,12 +1,24 @@
 package com.example.peter.bakingapp;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.peter.bakingapp.ui.recipe.RecipeFragment;
 
+import java.util.Objects;
+
+import static com.example.peter.bakingapp.app.Constants.WIDGET_REQUEST_RECIPE;
+
 public class MainActivity
         extends AppCompatActivity {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    // ToDo - Store the recipe ID in shared prefs in case data is lost and for populating widget
+    // ToDo - Check for correct handling of network status
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
