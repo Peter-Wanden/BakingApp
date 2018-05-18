@@ -127,9 +127,13 @@ public class RecipeDetailFragment
     @Override
     public void onClick(int selectedStepId) {
 
-        if (getActivity().getResources().getBoolean(R.bool.is_tablet)) {
+        if (Objects.requireNonNull(getActivity())
+                .getResources()
+                .getBoolean(R.bool.is_tablet)) {
+
             mStepsSelectedCallback.onStepSelected(selectedStepId);
         } else {
+
             Intent intent = new Intent(getActivity(), StepsActivity.class);
             intent.putExtra(SELECTED_RECIPE, mSelectedRecipe);
             intent.putExtra(STEP, selectedStepId);

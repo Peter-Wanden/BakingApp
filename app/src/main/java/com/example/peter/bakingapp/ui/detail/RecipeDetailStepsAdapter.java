@@ -3,6 +3,7 @@ package com.example.peter.bakingapp.ui.detail;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,8 +137,8 @@ public class RecipeDetailStepsAdapter
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            Steps selectedStep = mSteps.get(adapterPosition);
-            mClickHandler.onClick(selectedStep.getStepId());
+//            Steps selectedStep = mSteps.get(adapterPosition);
+            mClickHandler.onClick(adapterPosition);
         }
     }
 }
