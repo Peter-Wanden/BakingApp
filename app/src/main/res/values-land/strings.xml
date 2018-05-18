@@ -6,4 +6,5 @@
     <string name="next_button">Next</string>
     <string name="fragment_step_detail_image_placeholder">An image in place of a video</string>
     <string name="app_widget_empty_view">Please select a recipe to see its ingredients.</string>
+    <string name="image_of_meal">An image of the completed recipe</string>
 </resources>

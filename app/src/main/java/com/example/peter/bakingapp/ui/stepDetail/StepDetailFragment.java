@@ -129,16 +129,22 @@ public class StepDetailFragment
             Uri uri = Uri.parse(videoUrl);
 
             /* Set the correct view visibilities for playing a video */
-            mStepDetailBinding.fragmentStepDetailVideoPlaceholder.setVisibility(View.INVISIBLE);
-            mStepDetailBinding.fragmentStepDetailVideoView.setVisibility(View.VISIBLE);
+            mStepDetailBinding.fragmentStepDetailVideoPlaceholder
+                    .setVisibility(View.INVISIBLE);
+
+            mStepDetailBinding.fragmentStepDetailVideoView
+                    .setVisibility(View.VISIBLE);
 
             setupPlayer(uri);
 
         } else {
 
             /* If not, set the correct view visibilities and show a placeholder image */
-            mStepDetailBinding.fragmentStepDetailVideoView.setVisibility(View.INVISIBLE);
-            mStepDetailBinding.fragmentStepDetailVideoPlaceholder.setVisibility(View.VISIBLE);
+            mStepDetailBinding.fragmentStepDetailVideoView
+                    .setVisibility(View.INVISIBLE);
+
+            mStepDetailBinding.fragmentStepDetailVideoPlaceholder
+                    .setVisibility(View.VISIBLE);
 
             Picasso.get()
                     .load(R.drawable.menu_placeholder)
@@ -251,20 +257,28 @@ public class StepDetailFragment
     private void updateButtonVisibility() {
 
             if (mStepId == 0) {
-                mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.INVISIBLE);
+                mStepDetailBinding.fragmentStepDetailStepButtonPrevious
+                        .setVisibility(View.INVISIBLE);
             } else {
-                mStepDetailBinding.fragmentStepDetailStepButtonPrevious.setVisibility(View.VISIBLE);
+                mStepDetailBinding.fragmentStepDetailStepButtonPrevious
+                        .setVisibility(View.VISIBLE);
             }
+
             if (mStepId == mSteps.size() - 1) {
-                mStepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.INVISIBLE);
+                mStepDetailBinding.fragmentStepDetailStepButtonNext
+                        .setVisibility(View.INVISIBLE);
             } else {
-                mStepDetailBinding.fragmentStepDetailStepButtonNext.setVisibility(View.VISIBLE);
+                mStepDetailBinding.fragmentStepDetailStepButtonNext
+                        .setVisibility(View.VISIBLE);
             }
     }
 
     /* Set the description text */
     private void setDescriptionText(){
-        mStepDetailBinding.fragmentStepDetailTitle.setText(mCurrentStep.getShortDescription());
-        mStepDetailBinding.fragmentStepDetailDescription.setText(mCurrentStep.getDescription());
+        mStepDetailBinding.fragmentStepDetailTitle
+                .setText(mCurrentStep.getShortDescription());
+
+        mStepDetailBinding.fragmentStepDetailDescription
+                .setText(mCurrentStep.getDescription());
     }
 }

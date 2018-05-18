@@ -13,4 +13,6 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_empty_view">Please select a recipe to see its ingredients.</string>
+    <string name="image_of_meal">An image of the completed recipe</string>
+    <string name="change_recipe_button">Click to change recipe</string>
 </resources>

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.model.Ingredient;
+import com.example.peter.bakingapp.utils.IngredientFormat;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -53,17 +54,14 @@ public class RecipeDetailIngredientAdapter
         }
 
         /* Get the fields we're interested in, format then display them */
-        DecimalFormat decimalFormat = new DecimalFormat("####.####");
-        holder.quantityTV.setText(decimalFormat.format(ingredients.getQuantity()));
+        holder.quantityTV.setText(
+                IngredientFormat.formatRawQuantity(ingredients.getQuantity()));
 
-        holder.measureTV.setText(ingredients.getMeasure().toLowerCase());
+        holder.measureTV.setText(
+                IngredientFormat.formatRawUnits(ingredients.getMeasure()));
 
-        String ingredient = ingredients.getIngredient()
-                .substring(0,1)
-                .toUpperCase()
-                + ingredients.getIngredient().substring(1);
-
-        holder.ingredientTV.setText(ingredient);
+        holder.ingredientTV.setText(
+                IngredientFormat.formatRawIngredient(ingredients.getIngredient()));
     }
 
     @Override

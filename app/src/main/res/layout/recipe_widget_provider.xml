@@ -9,7 +9,8 @@
         android:id="@+id/recipe_widget_provider_title_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
 
         <TextView
             android:id="@+id/recipe_widget_provider_recipe_title"
@@ -23,10 +24,16 @@
             android:textAllCaps="true"
             android:textStyle="bold|italic"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/recipe_widget_provider_add_button"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="4dp"
+            android:background="@null"
+            android:contentDescription="@string/change_recipe_button"
+            android:scaleType="fitCenter"
+            android:tint="@color/white"
+            android:src="@drawable/ic_add_circle_outline_black_24dp"
             android:layout_weight="1"/>
     </LinearLayout>
 

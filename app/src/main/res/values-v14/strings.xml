@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_widget_empty_view">Please select a recipe to see its ingredients.</string>
+    <string name="image_of_meal">An image of the completed recipe</string>
 </resources>

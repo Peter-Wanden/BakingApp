@@ -13,6 +13,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,6 +98,10 @@ public class RecipeFragment
         /* Check for connectivity */
         if (NetworkUtils.getNetworkStatus(Objects.requireNonNull(getActivity()))) {
             getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
+        } else {
+            Log.e(LOG_TAG, "No network should be showing");
+            /* Display no network state */
+            showNoNetwork();
         }
     }
 
@@ -147,7 +152,7 @@ public class RecipeFragment
     @NonNull
     @Override
     public Loader<ArrayList<Recipe>> onCreateLoader(int loaderId, @Nullable Bundle bundle) {
-        indicateLoading();
+        showLoading();
         return new RecipeLoader(getActivity());
     }
 
@@ -155,10 +160,10 @@ public class RecipeFragment
     public void onLoadFinished(@NonNull Loader<ArrayList<Recipe>> loader, ArrayList<Recipe> recipes) {
 
         if (recipes !=null && recipes.size() > 0) {
-            showResults();
+            hideLoading();
             mRecipeAdapter.swapRecipes(recipes);
         } else {
-            noDataAvailable();
+            showEmptyView();
         }
     }
 
@@ -169,16 +174,26 @@ public class RecipeFragment
     }
 
     /* Data loading and result states */
-    private void indicateLoading() {
+    private void showLoading() {
+        hideNoNetwork();
         mRecipesBinding.fragmentRecipesProgressBar.setVisibility(View.VISIBLE);
     }
 
-    private void showResults() {
+    private void hideLoading() {
         mRecipesBinding.fragmentRecipesProgressBar.setVisibility(View.GONE);
     }
 
-    private void noDataAvailable() {
-        showResults();
+    private void showEmptyView() {
+        hideLoading();
         mRecipesBinding.fragmentRecipesEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoNetwork() {
+        hideLoading();
+        mRecipesBinding.fragmentRecipesNoNetwork.setVisibility(View.VISIBLE);
+    }
+
+    private void hideNoNetwork() {
+        mRecipesBinding.fragmentRecipesNoNetwork.setVisibility(View.GONE);
     }
 }

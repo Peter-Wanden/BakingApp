@@ -3,13 +3,17 @@ package com.example.peter.bakingapp.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.TextView;
 
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.model.Ingredient;
 import com.example.peter.bakingapp.utils.GsonUtils;
+import com.example.peter.bakingapp.utils.IngredientFormat;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,15 +77,15 @@ public class WidgetServiceList
 
             views.setTextViewText(
                     R.id.ingredient_list_item_quantity,
-                    String.valueOf(currentIngredient.getQuantity()));
+                    IngredientFormat.formatRawQuantity(currentIngredient.getQuantity()));
 
             views.setTextViewText(
                     R.id.ingredient_list_item_measure,
-                    currentIngredient.getMeasure());
+                    IngredientFormat.formatRawUnits(currentIngredient.getMeasure()));
 
             views.setTextViewText(
                     R.id.ingredient_list_item_ingredient,
-                    currentIngredient.getIngredient());
+                    IngredientFormat.formatRawIngredient(currentIngredient.getIngredient()));
 
             return views;
         }
