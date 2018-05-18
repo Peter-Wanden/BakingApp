@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_margin="8dp">
 
-    <TextView
-        android:layout_weight="1"
-        android:gravity="end"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        style="@style/TableText"
-        android:text="-"/>
+    <ImageView
+        android:id="@+id/list_item_step_thumbnail_IV"
+        android:contentDescription="@string/recipe_step_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:foreground="@drawable/backdrop_gradient"/>
+
+    <ImageView
+        android:id="@+id/list_item_step_play_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_play_circle"/>
 
     <TextView
         android:id="@+id/list_item_step_stepsTv"
-        android:layout_weight="4"
         android:paddingBottom="@dimen/card_bottom_padding"
-        style="@style/TableText"/>
+        style="@style/TableText"
+        android:padding="@dimen/card_right_left_padding"
+        android:layout_width="match_parent"
+        android:textColor="@color/black"
+        tools:text="Step short description here"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -15,4 +15,6 @@
     <string name="app_widget_empty_view">Please select a recipe to see its ingredients.</string>
     <string name="image_of_meal">An image of the completed recipe</string>
     <string name="change_recipe_button">Click to change recipe</string>
+    <string name="step_dash">-</string>
+    <string name="recipe_step_thumbnail">A thumbnail image showing an overview of this step</string>
 </resources>

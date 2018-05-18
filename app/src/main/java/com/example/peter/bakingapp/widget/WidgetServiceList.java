@@ -75,6 +75,17 @@ public class WidgetServiceList
                     mContext.getPackageName(),
                     R.layout.list_item_ingredient);
 
+            /* Set the TextView text color */
+            views.setTextColor(R.id.ingredient_list_item_quantity,
+                    getResources().getColor(R.color.white));
+
+            views.setTextColor(R.id.ingredient_list_item_measure,
+                    getResources().getColor(R.color.white));
+
+            views.setTextColor(R.id.ingredient_list_item_ingredient,
+                    getResources().getColor(R.color.white));
+
+            /* Set the TextView text */
             views.setTextViewText(
                     R.id.ingredient_list_item_quantity,
                     IngredientFormat.formatRawQuantity(currentIngredient.getQuantity()));

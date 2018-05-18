@@ -18,6 +18,7 @@ public class MainActivity
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     // ToDo - ReadMe file with libraries and what they were used for
+    // ToDo - One of the recipes or steps has a picture - where is it?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

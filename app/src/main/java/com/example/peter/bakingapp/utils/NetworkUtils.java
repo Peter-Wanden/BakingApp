@@ -14,10 +14,6 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class NetworkUtils {
 
-    // Todo - Implement off line mode
-
-    private static final String LOG_TAG = NetworkUtils.class.getSimpleName();
-
     private NetworkUtils(){}
 
     /**

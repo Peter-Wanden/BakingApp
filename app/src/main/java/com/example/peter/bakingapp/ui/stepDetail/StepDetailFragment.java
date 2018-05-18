@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.databinding.FragmentStepDetailBinding;
 import com.example.peter.bakingapp.model.Recipe;
@@ -29,7 +29,6 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -42,8 +41,6 @@ import static com.example.peter.bakingapp.app.Constants.STEP;
 public class StepDetailFragment
         extends
         Fragment {
-
-    private static final String LOG_TAG = StepDetailFragment.class.getSimpleName();
 
     /* Screen members */
     private FragmentStepDetailBinding mStepDetailBinding;
@@ -87,7 +84,7 @@ public class StepDetailFragment
         mSteps = incomingRecipe != null ? incomingRecipe.getSteps() : null;
         mStepId = getArguments().getInt(STEP, -1);
 
-        if (mStepId != -1) {
+        if (mStepId != -1 && mStepId <= mSteps.size()) {
             mCurrentStep = mSteps.get(mStepId);
             } else {
             mStepId = 0;
@@ -146,7 +143,8 @@ public class StepDetailFragment
             mStepDetailBinding.fragmentStepDetailVideoPlaceholder
                     .setVisibility(View.VISIBLE);
 
-            Picasso.get()
+            Glide
+                    .with(mStepDetailBinding.fragmentStepDetailVideoPlaceholder)
                     .load(R.drawable.menu_placeholder)
                     .into(mStepDetailBinding.fragmentStepDetailVideoPlaceholder);
         }

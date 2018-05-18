@@ -3,16 +3,16 @@ package com.example.peter.bakingapp.ui.recipe;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.peter.bakingapp.GlideApp;
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.model.Recipe;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -67,16 +67,17 @@ public class RecipeAdapter
         holder.recipeTitleTv.setText(recipeTitle);
 
         if (imageLink != null && imageLink.length() > 2) {
-            Picasso
-                    .get()
-                    .load(currentRecipe
-                            .getImage())
+
+            GlideApp
+                    .with(holder.recipeThumbnailIv)
+                    .load(currentRecipe.getImage())
                     .placeholder(R.drawable.menu_placeholder)
-                    .error(R.drawable.menu_placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .into(holder.recipeThumbnailIv);
         } else {
-            Picasso
-                    .get()
+
+            GlideApp
+                    .with(holder.recipeThumbnailIv)
                     .load(R.drawable.menu_placeholder)
                     .into(holder.recipeThumbnailIv);
         }

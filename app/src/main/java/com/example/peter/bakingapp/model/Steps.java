@@ -69,5 +69,6 @@ public class Steps implements Parcelable{
     public int getStepId() { return mId; }
     public String getShortDescription() { return mShortDescription; }
     public String getDescription() { return mDescription; }
+    public String getThumbnailUrl() { return mThumbnailUrl; }
     public String getVideoUrl() { return mVideoUrl; }
 }

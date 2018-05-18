@@ -3,15 +3,17 @@ package com.example.peter.bakingapp.ui.detail;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.peter.bakingapp.GlideApp;
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.model.Steps;
+
 
 import java.util.ArrayList;
 
@@ -59,11 +61,36 @@ public class RecipeDetailStepsAdapter
 
         /* Get the fields we're interested in */
         String shortDescription = currentStep.getShortDescription();
+        String stepImageUrl = currentStep.getThumbnailUrl();
+        String stepVideoUrl = currentStep.getVideoUrl();
+
+        if (stepImageUrl.length() > 0) {
+
+            GlideApp
+                    .with(holder.stepIV)
+                    .load(stepImageUrl)
+                    .placeholder(R.drawable.menu_placeholder).centerInside()
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .into(holder.stepIV);
+
+        } else if (stepVideoUrl.length() > 0){
+
+            GlideApp
+                    .with(holder.stepIV)
+                    .load(stepVideoUrl)
+                    .placeholder(R.drawable.menu_placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).centerInside()
+                    .into(holder.stepIV);
+        } else {
+
+            GlideApp
+                    .with(holder.stepIV)
+                    .load(R.drawable.menu_placeholder)
+                    .into(holder.stepIV);
+        }
 
         /* set the colors of the view */
-        if (mContext.getResources().getBoolean(R.bool.is_tablet)){
-            holder.stepTv.setTextColor(mContext.getResources().getColor(R.color.white));
-        }
+        holder.stepTv.setTextColor(mContext.getResources().getColor(R.color.white));
 
         /* Apply the fields to the views */
         holder.stepTv.setText(shortDescription);
@@ -91,13 +118,17 @@ public class RecipeDetailStepsAdapter
             implements
             View.OnClickListener {
 
-        final TextView stepTv;
+        TextView stepTv;
+        ImageView stepIV;
+        ImageView stepPlay;
 
 
         RecipeStepsAdapterViewHolder(View itemView) {
             super(itemView);
 
             stepTv = itemView.findViewById(R.id.list_item_step_stepsTv);
+            stepIV = itemView.findViewById(R.id.list_item_step_thumbnail_IV);
+            stepPlay = itemView.findViewById(R.id.list_item_step_play_button);
 
             itemView.setOnClickListener(this);
         }

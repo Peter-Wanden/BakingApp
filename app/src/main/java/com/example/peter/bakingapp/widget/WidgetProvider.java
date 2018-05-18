@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.example.peter.bakingapp.MainActivity;
@@ -32,6 +33,9 @@ public class WidgetProvider
         String recipeTitle = PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(RECIPE_TITLE, "");
+
+        /* Remove the empty view */
+        remoteViews.setViewVisibility(R.id.empty_view, View.GONE);
 
         // Set the recipe title in the widget
         remoteViews.setTextViewText(
