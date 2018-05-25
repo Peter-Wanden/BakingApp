@@ -20,8 +20,6 @@ public class RecipeAdapter
         extends
         RecyclerView.Adapter<RecipeAdapter.RecipeAdapterViewHolder> {
 
-    private static final String LOG_TAG = RecipeAdapter.class.getSimpleName();
-
     /* Used to access utility methods, app resources and layout inflaters */
     private final Context mContext;
 

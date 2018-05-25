@@ -33,7 +33,7 @@ public class WidgetServiceList
             implements
             RemoteViewsService.RemoteViewsFactory {
 
-        private Context mContext;
+        private final Context mContext;
         private List<Ingredient> mIngredients = Collections.emptyList();
 
         public ListRemoteViewsFactory(Context applicationContext) {

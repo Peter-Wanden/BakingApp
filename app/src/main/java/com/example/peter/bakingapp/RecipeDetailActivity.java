@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.peter.bakingapp.model.Recipe;
 import com.example.peter.bakingapp.ui.detail.RecipeDetailFragment;
@@ -21,13 +20,9 @@ public class RecipeDetailActivity
         implements
         RecipeDetailFragment.OnStepSelectedListener {
 
-    private static final String LOG_TAG = RecipeDetailActivity.class.getSimpleName();
-
     private RecipeDetailFragment mRecipeDetailFragment;
-    private StepDetailFragment mStepDetailFragment;
     private Bundle mSelectedRecipe;
-    public FragmentManager mFragmentManager;
-
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,9 +81,8 @@ public class RecipeDetailActivity
 
     /* Creates a new StepDetailFragment */
     private void showNewStep (int stepId) {
-
         mSelectedRecipe.putInt(STEP, stepId);
-        mStepDetailFragment = new StepDetailFragment();
+        StepDetailFragment mStepDetailFragment = new StepDetailFragment();
         mStepDetailFragment.setArguments(mSelectedRecipe);
 
         mFragmentManager.beginTransaction()

@@ -32,8 +32,6 @@ public class RecipeDetailFragment
         implements
         RecipeDetailStepsAdapter.StepsAdapterOnCLickHandler {
 
-    private static final String LOG_TAG = RecipeDetailFragment.class.getSimpleName();
-
     private FragmentRecipeDetailBinding mDetailBinding;
     private Recipe mSelectedRecipe;
     private OnStepSelectedListener mStepsSelectedCallback;

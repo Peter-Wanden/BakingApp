@@ -23,27 +23,27 @@ public class Recipe implements Parcelable {
 
     /* The recipes Id from JSON */
     @SerializedName(value = "id", alternate = "mId")
-    private int mId;
+    private final int mId;
 
     /* Recipes name / title */
     @SerializedName(value = "name", alternate = "mName")
-    private String mName;
+    private final String mName;
 
     /* Number of portions this recipe makes */
     @SerializedName(value = "servings", alternate = "mServings")
-    private int mServings;
+    private final int mServings;
 
     /* A URL that points to an image for the recipe */
     @SerializedName(value = "image", alternate = "mImage")
-    private String mImage;
+    private final String mImage;
 
     /* The list of ingredients to make the recipe */
     @SerializedName(value = "ingredients", alternate = "mIngredients")
-    private ArrayList<Ingredient> mIngredients;
+    private final ArrayList<Ingredient> mIngredients;
 
     /* A list of instructions that describe how to make the recipe */
     @SerializedName(value = "steps", alternate = "mSteps")
-    private ArrayList<Steps> mSteps;
+    private final ArrayList<Steps> mSteps;
 
     /**
      * Constructor for a recipe object

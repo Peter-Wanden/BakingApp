@@ -6,7 +6,6 @@
     android:background="@drawable/widget_background">
 
     <LinearLayout
-        android:id="@+id/recipe_widget_provider_title_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

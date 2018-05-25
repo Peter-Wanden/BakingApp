@@ -12,7 +12,7 @@ public class WidgetService extends IntentService {
     private static final String LOG_TAG = WidgetService.class.getSimpleName();
 
     /* Define the actions the intent service can handle */
-    public static final String ACTION_UPDATE_WIDGET = "com.example.peter.bakingapp.update_widget";
+    private static final String ACTION_UPDATE_WIDGET = "com.example.peter.bakingapp.update_widget";
 
     /**
      * Creates an IntentService. Invoked by your subclass's constructor.

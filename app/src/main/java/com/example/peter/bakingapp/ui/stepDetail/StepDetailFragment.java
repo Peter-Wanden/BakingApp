@@ -100,7 +100,7 @@ public class StepDetailFragment
     }
 
     /* Updates the Step information */
-    public void updateStep() {
+    private void updateStep() {
         mCurrentStep = mSteps.get(mStepId);
         String videoUrl = mCurrentStep.getVideoUrl();
 
@@ -224,7 +224,7 @@ public class StepDetailFragment
     }
 
     /* Configure the previous and next buttons */
-    public void configureButtons() {
+    private void configureButtons() {
 
         mStepDetailBinding.fragmentStepDetailStepButtonPrevious
                 .setOnClickListener(new View.OnClickListener() {

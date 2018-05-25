@@ -21,22 +21,26 @@ public class Steps implements Parcelable{
     };
 
     @SerializedName(value = "id", alternate = "mId")
-    private int mId;
+    private final int mId;
 
     @SerializedName(value = "shortDescription", alternate = "mShortDescription")
-    private String mShortDescription;
+    private final String mShortDescription;
 
     @SerializedName(value = "description", alternate = "mDescription")
-    private String mDescription;
+    private final String mDescription;
 
     @SerializedName(value = "videoURL", alternate = "mVideoUrl")
-    private String mVideoUrl;
+    private final String mVideoUrl;
 
     @SerializedName(value = "thumbnailURL", alternate = "mThumbnailUrl")
-    private String mThumbnailUrl;
+    private final String mThumbnailUrl;
 
-    public Steps(int id, String shortDescription, String description, String videoUrl,
+    public Steps(int id,
+                 String shortDescription,
+                 String description,
+                 String videoUrl,
                  String thumbnailUrl){
+
         this.mId = id;
         this.mShortDescription = shortDescription;
         this.mDescription = description;

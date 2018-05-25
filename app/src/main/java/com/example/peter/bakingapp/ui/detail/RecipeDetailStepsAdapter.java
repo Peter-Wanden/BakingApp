@@ -22,8 +22,6 @@ public class RecipeDetailStepsAdapter
         extends
         RecyclerView.Adapter<RecipeDetailStepsAdapter.RecipeStepsAdapterViewHolder> {
 
-    public static final String LOG_TAG = RecipeDetailStepsAdapter.class.getSimpleName();
-
     /* Used to access utility methods, app resources and layout inflaters */
     private final Context mContext;
 
@@ -119,9 +117,9 @@ public class RecipeDetailStepsAdapter
             implements
             View.OnClickListener {
 
-        TextView stepTv;
-        ImageView stepIV;
-        ImageView stepPlay;
+        final TextView stepTv;
+        final ImageView stepIV;
+        final ImageView stepPlay;
 
 
         RecipeStepsAdapterViewHolder(View itemView) {

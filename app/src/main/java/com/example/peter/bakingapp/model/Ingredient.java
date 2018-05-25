@@ -6,16 +6,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class Ingredient implements Parcelable {
 
-    private int mRecipeId;
+    private final int mRecipeId;
 
     @SerializedName(value = "quantity", alternate = "mQuantity")
-    private double mQuantity;
+    private final double mQuantity;
 
     @SerializedName(value = "measure", alternate = "mMeasure")
-    private String mMeasure;
+    private final String mMeasure;
 
     @SerializedName(value = "ingredient", alternate = "mIngredient")
-    private String mIngredient;
+    private final String mIngredient;
 
     /**
      * Constructor for an Ingredient object.
@@ -24,7 +24,11 @@ public class Ingredient implements Parcelable {
      * @param measure       Unit of measure used to measure this ingredient.
      * @param ingredient    The given common name for this ingredient.
      */
-    public Ingredient(int recipeId, double quantity, String measure, String ingredient){
+    public Ingredient(int recipeId,
+                      double quantity,
+                      String measure,
+                      String ingredient){
+
         this.mRecipeId = recipeId;
         this.mQuantity = quantity;
         this.mMeasure = measure;

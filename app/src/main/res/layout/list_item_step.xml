@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_margin="8dp">
 
@@ -16,6 +15,7 @@
 
     <ImageView
         android:id="@+id/list_item_step_play_button"
+        android:contentDescription="@string/show_or_play_step"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerInParent="true"

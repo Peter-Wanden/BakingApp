@@ -10,9 +10,6 @@ public class Constants {
     public static final String RECIPE_TITLE = "recipe_title";
     public static final String RECIPE_INGREDIENTS = "recipe_ingredients";
 
-    /* Key value for the widget ID */
-    public static final String WIDGET_ID = "widget_id";
-
     /* Key value for the recipe detail fragment parcelable object */
     public static final String RECIPE_DETAIL_FRAGMENT = "recipe_detail_fragment";
 
@@ -22,7 +19,4 @@ public class Constants {
     /* ExoPlayer position and states key */
     public static final String PLAYER_POSITION = "player_position";
     public static final String PLAYER_STATE = "player_state";
-
-    /* Key value for the widget to flag a request */
-    public static final String WIDGET_REQUEST_RECIPE = "widget_request_recipe";
 }

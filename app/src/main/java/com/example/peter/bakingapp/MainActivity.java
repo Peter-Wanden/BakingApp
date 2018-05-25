@@ -1,24 +1,15 @@
 package com.example.peter.bakingapp;
 
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.peter.bakingapp.ui.recipe.RecipeFragment;
-
-import java.util.Objects;
-
-import static com.example.peter.bakingapp.app.Constants.WIDGET_REQUEST_RECIPE;
 
 public class MainActivity
         extends AppCompatActivity {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
-
     // ToDo - ReadMe file with libraries and what they were used for
-    // ToDo - Espresso - Get testing.
+    // ToDo - RecipeFragment is showing no network state after configuration change - fix for all views
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

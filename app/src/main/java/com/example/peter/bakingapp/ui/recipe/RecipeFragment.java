@@ -42,8 +42,6 @@ public class RecipeFragment
         LoaderManager.LoaderCallbacks<ArrayList<Recipe>>,
         RecipeAdapter.RecipeAdapterOnClickHandler {
 
-    private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
-
     private FragmentRecipesBinding mRecipesBinding;
     private static final int RECIPE_LOADER_ID = 100;
     private ArrayList<Recipe> mRecipes;
@@ -69,7 +67,7 @@ public class RecipeFragment
         mRecipeAdapter = new RecipeAdapter(getActivity(), this);
         mRecipesBinding.fragmentRecipesRecyclerView.setAdapter(mRecipeAdapter);
 
-        /* Create RecyclerViews with dynamic widths depending on the display type. */
+        /* Creates RecyclerViews with dynamic widths depending on the display type. */
         // Portrait for phone.
         // Landscape for phone.
         // Portrait for tablet.
@@ -99,7 +97,6 @@ public class RecipeFragment
         if (NetworkUtils.getNetworkStatus(Objects.requireNonNull(getActivity()))) {
             getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
         } else {
-            Log.e(LOG_TAG, "No network should be showing");
             /* Display no network state */
             showNoNetwork();
         }
@@ -127,7 +124,8 @@ public class RecipeFragment
     @Override
     public void onClick(Recipe selectedRecipe) {
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         /*
         Store the recipe title and ingredient list (converted to JSON) in shared preferences

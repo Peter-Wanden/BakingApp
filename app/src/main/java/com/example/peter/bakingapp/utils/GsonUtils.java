@@ -16,8 +16,6 @@ import java.util.Objects;
 
 public class GsonUtils {
 
-    private static final String LOG_TAG = GsonUtils.class.getSimpleName();
-
     public static ArrayList<Recipe> getRecipes() {
 
         /* Create the URL object */

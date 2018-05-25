@@ -1,7 +1,10 @@
 package com.example.peter.bakingapp;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,8 +18,6 @@ import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 import static com.example.peter.bakingapp.app.Constants.SELECTED_RECIPE;
 
 public class StepsActivity extends AppCompatActivity {
-
-    private static final String LOG_TAG = StepsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
