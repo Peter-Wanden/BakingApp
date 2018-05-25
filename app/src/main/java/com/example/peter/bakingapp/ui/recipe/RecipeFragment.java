@@ -13,7 +13,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,13 +87,13 @@ public class RecipeFragment
                     LinearLayoutManager.VERTICAL, false);
 
             mRecipesBinding.fragmentRecipesRecyclerView.setLayoutManager(mLinearLayoutManager);
-
         }
 
         mRecipesBinding.fragmentRecipesRecyclerView.setHasFixedSize(true);
 
         /* Check for connectivity */
         if (NetworkUtils.getNetworkStatus(Objects.requireNonNull(getActivity()))) {
+            hideNoNetwork();
             getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
         } else {
             /* Display no network state */

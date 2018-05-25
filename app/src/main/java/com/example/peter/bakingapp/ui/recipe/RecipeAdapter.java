@@ -110,7 +110,7 @@ public class RecipeAdapter
         final TextView recipeTitleTv;
         final TextView recipeServingsTv;
 
-        public RecipeAdapterViewHolder(View itemView) {
+        RecipeAdapterViewHolder(View itemView) {
             super(itemView);
 
             recipeThumbnailIv = itemView.findViewById(R.id.recipe_list_item_thumbnail);

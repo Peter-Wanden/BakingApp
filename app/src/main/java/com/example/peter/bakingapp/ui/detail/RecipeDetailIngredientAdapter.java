@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.example.peter.bakingapp.R;
 import com.example.peter.bakingapp.model.Ingredient;
 import com.example.peter.bakingapp.utils.IngredientFormat;
-
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class RecipeDetailIngredientAdapter
@@ -82,7 +80,7 @@ public class RecipeDetailIngredientAdapter
         final TextView measureTV;
         final TextView ingredientTV;
 
-        public RecipeIngredientAdapterViewHolder (View itemView) {
+        RecipeIngredientAdapterViewHolder(View itemView) {
             super(itemView);
 
             quantityTV = itemView.findViewById(R.id.ingredient_list_item_quantity);

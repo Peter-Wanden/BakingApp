@@ -9,8 +9,6 @@ import android.support.annotation.Nullable;
 
 public class WidgetService extends IntentService {
 
-    private static final String LOG_TAG = WidgetService.class.getSimpleName();
-
     /* Define the actions the intent service can handle */
     private static final String ACTION_UPDATE_WIDGET = "com.example.peter.bakingapp.update_widget";
 

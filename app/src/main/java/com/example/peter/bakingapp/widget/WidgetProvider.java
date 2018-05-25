@@ -21,11 +21,9 @@ public class WidgetProvider
         extends
         AppWidgetProvider {
 
-    private static final String LOG_TAG = WidgetProvider.class.getSimpleName();
-
-    static void updateAppWidget(Context context,
-                                AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    private static void updateAppWidget(Context context,
+                                        AppWidgetManager appWidgetManager,
+                                        int appWidgetId) {
 
         RemoteViews remoteViews = getRemoteViews(context);
 
